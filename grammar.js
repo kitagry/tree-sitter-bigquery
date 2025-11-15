@@ -22,7 +22,10 @@ module.exports = grammar({
       $.create_table_statement,
       $.create_view_statement,
       $.drop_table_statement,
-      $.drop_view_statement
+      $.drop_view_statement,
+      $.insert_statement,
+      $.update_statement,
+      $.delete_statement
     )),
 
     select_statement: $ => seq(
@@ -423,6 +426,72 @@ module.exports = grammar({
     struct_type_field: $ => seq(
       optional(seq(field('name', $.identifier), optional(kw('AS')))),
       field('type', $.type)
+    ),
+
+    // Stage 9: DML statements
+    insert_statement: $ => seq(
+      kw('INSERT'),
+      optional(kw('INTO')),
+      field('table', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      optional($.column_list),
+      choice(
+        $.values_clause,
+        $.select_statement
+      )
+    ),
+
+    update_statement: $ => seq(
+      kw('UPDATE'),
+      field('table', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      $.set_clause,
+      optional($.where_clause)
+    ),
+
+    delete_statement: $ => seq(
+      kw('DELETE'),
+      optional(kw('FROM')),
+      field('table', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      optional($.where_clause)
+    ),
+
+    column_list: $ => seq(
+      '(',
+      commaSep1($.identifier),
+      ')'
+    ),
+
+    values_clause: $ => seq(
+      kw('VALUES'),
+      commaSep1($.value_list)
+    ),
+
+    value_list: $ => seq(
+      '(',
+      commaSep1($._expression),
+      ')'
+    ),
+
+    set_clause: $ => seq(
+      kw('SET'),
+      commaSep1($.assignment)
+    ),
+
+    assignment: $ => seq(
+      field('column', $.identifier),
+      '=',
+      field('value', $._expression)
     ),
 
     // Primitives

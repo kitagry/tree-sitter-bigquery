@@ -105,7 +105,7 @@ This grammar is being developed incrementally in stages, from simple to complex:
 - ALTER TABLE
 - DROP statements
 
-### Stage 9: Other DML/DQL
+### Stage 9: Other DML/DQL ✓
 - INSERT, UPDATE, DELETE, MERGE
 - DECLARE and SET
 

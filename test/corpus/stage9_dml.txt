@@ -1,0 +1,155 @@
+================================================================================
+INSERT with single row VALUES
+================================================================================
+
+INSERT INTO users (id, name)
+VALUES (1, 'John')
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (insert_statement
+    table: (identifier)
+    (column_list
+      (identifier)
+      (identifier))
+    (values_clause
+      (value_list
+        (number_literal)
+        (string_literal)))))
+
+================================================================================
+INSERT with multiple rows VALUES
+================================================================================
+
+INSERT INTO users (id, name)
+VALUES (1, 'John'), (2, 'Jane')
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (insert_statement
+    table: (identifier)
+    (column_list
+      (identifier)
+      (identifier))
+    (values_clause
+      (value_list
+        (number_literal)
+        (string_literal))
+      (value_list
+        (number_literal)
+        (string_literal)))))
+
+================================================================================
+INSERT from SELECT
+================================================================================
+
+INSERT INTO active_users (id, name)
+SELECT id, name FROM users WHERE active = TRUE
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (insert_statement
+    table: (identifier)
+    (column_list
+      (identifier)
+      (identifier))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier))
+      (where_clause
+        (binary_expression
+          left: (identifier)
+          right: (boolean_literal))))))
+
+================================================================================
+Simple UPDATE
+================================================================================
+
+UPDATE users
+SET name = 'Jane'
+WHERE id = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (update_statement
+    table: (identifier)
+    (set_clause
+      (assignment
+        column: (identifier)
+        value: (string_literal)))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (number_literal)))))
+
+================================================================================
+UPDATE with multiple columns
+================================================================================
+
+UPDATE users
+SET name = 'John', email = 'john@example.com'
+WHERE id = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (update_statement
+    table: (identifier)
+    (set_clause
+      (assignment
+        column: (identifier)
+        value: (string_literal))
+      (assignment
+        column: (identifier)
+        value: (string_literal)))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (number_literal)))))
+
+================================================================================
+Simple DELETE
+================================================================================
+
+DELETE FROM users
+WHERE id = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (delete_statement
+    table: (identifier)
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (number_literal)))))
+
+================================================================================
+DELETE with complex WHERE
+================================================================================
+
+DELETE FROM users
+WHERE active = FALSE AND last_login < '2020-01-01'
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (delete_statement
+    table: (identifier)
+    (where_clause
+      (binary_expression
+        left: (binary_expression
+          left: (identifier)
+          right: (boolean_literal))
+        right: (binary_expression
+          left: (identifier)
+          right: (string_literal))))))
