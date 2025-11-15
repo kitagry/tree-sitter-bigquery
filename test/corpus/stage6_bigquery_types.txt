@@ -1,0 +1,185 @@
+================================================================================
+ARRAY literal with numbers
+================================================================================
+
+SELECT [1, 2, 3] AS numbers
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (array_literal
+            (number_literal)
+            (number_literal)
+            (number_literal))
+          alias: (identifier))))))
+
+================================================================================
+ARRAY literal with strings
+================================================================================
+
+SELECT ['a', 'b', 'c'] AS letters
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (array_literal
+            (string_literal)
+            (string_literal)
+            (string_literal))
+          alias: (identifier))))))
+
+================================================================================
+Empty ARRAY literal
+================================================================================
+
+SELECT [] AS empty
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (array_literal)
+          alias: (identifier))))))
+
+================================================================================
+Simple STRUCT
+================================================================================
+
+SELECT STRUCT(1 AS id, 'John' AS name) AS user
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (struct_literal
+            (struct_field
+              (number_literal)
+              alias: (identifier))
+            (struct_field
+              (string_literal)
+              alias: (identifier)))
+          alias: (identifier))))))
+
+================================================================================
+UNNEST with ARRAY
+================================================================================
+
+SELECT * FROM UNNEST([1, 2, 3]) AS number
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (table_alias
+        table: (unnest_expression
+          (array_literal
+            (number_literal)
+            (number_literal)
+            (number_literal)))
+        alias: (identifier)))))
+
+================================================================================
+Nested field access (2 levels)
+================================================================================
+
+SELECT user.name FROM customers
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (field_access
+          object: (identifier)
+          field: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Nested field access (3 levels)
+================================================================================
+
+SELECT user.name.first FROM customers
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (field_access
+          object: (field_access
+            object: (identifier)
+            field: (identifier))
+          field: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Qualified table name (dataset.table)
+================================================================================
+
+SELECT * FROM dataset.table_name
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (qualified_table_name
+        (identifier)
+        (identifier)))))
+
+================================================================================
+Qualified table name (project.dataset.table)
+================================================================================
+
+SELECT * FROM `project-id.dataset.table_name`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (backtick_identifier))))
+
+================================================================================
+Backtick identifier
+================================================================================
+
+SELECT `column-with-dash` FROM table_name
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (backtick_identifier)))
+    (from_clause
+      (identifier))))

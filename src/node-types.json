@@ -19,6 +19,14 @@
       "required": true,
       "types": [
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -59,6 +67,81 @@
           "named": true
         },
         {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
+          "type": "subquery",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "array_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "exists_expression",
+          "named": true
+        },
+        {
+          "type": "field_access",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
           "type": "subquery",
           "named": true
         },
@@ -78,6 +161,14 @@
         "required": true,
         "types": [
           {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -115,6 +206,10 @@
           },
           {
             "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
             "named": true
           },
           {
@@ -132,6 +227,14 @@
         "required": true,
         "types": [
           {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -169,6 +272,10 @@
           },
           {
             "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
             "named": true
           },
           {
@@ -238,6 +345,10 @@
         "required": true,
         "types": [
           {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           }
@@ -247,6 +358,14 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
           {
             "type": "identifier",
             "named": true
@@ -264,6 +383,10 @@
       "required": true,
       "types": [
         {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -272,11 +395,19 @@
           "named": true
         },
         {
+          "type": "qualified_table_name",
+          "named": true
+        },
+        {
           "type": "subquery",
           "named": true
         },
         {
           "type": "table_alias",
+          "named": true
+        },
+        {
+          "type": "unnest_expression",
           "named": true
         }
       ]
@@ -293,6 +424,14 @@
           {
             "type": ",",
             "named": false
+          },
+          {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "backtick_identifier",
+            "named": true
           },
           {
             "type": "binary_expression",
@@ -339,6 +478,10 @@
             "named": true
           },
           {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
             "type": "subquery",
             "named": true
           },
@@ -369,6 +512,14 @@
       "required": true,
       "types": [
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -406,6 +557,10 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
           "named": true
         },
         {
@@ -428,6 +583,14 @@
       "required": true,
       "types": [
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -465,6 +628,10 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
           "named": true
         },
         {
@@ -487,6 +654,14 @@
       "required": true,
       "types": [
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -527,6 +702,10 @@
           "named": true
         },
         {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
           "type": "subquery",
           "named": true
         },
@@ -546,6 +725,10 @@
         "required": true,
         "types": [
           {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
@@ -554,11 +737,19 @@
             "named": true
           },
           {
+            "type": "qualified_table_name",
+            "named": true
+          },
+          {
             "type": "subquery",
             "named": true
           },
           {
             "type": "table_alias",
+            "named": true
+          },
+          {
+            "type": "unnest_expression",
             "named": true
           }
         ]
@@ -568,6 +759,10 @@
         "required": true,
         "types": [
           {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
@@ -576,11 +771,19 @@
             "named": true
           },
           {
+            "type": "qualified_table_name",
+            "named": true
+          },
+          {
             "type": "subquery",
             "named": true
           },
           {
             "type": "table_alias",
+            "named": true
+          },
+          {
+            "type": "unnest_expression",
             "named": true
           }
         ]
@@ -621,6 +824,14 @@
       "required": true,
       "types": [
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -658,6 +869,10 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
           "named": true
         },
         {
@@ -695,6 +910,14 @@
       "required": true,
       "types": [
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -732,6 +955,10 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
           "named": true
         },
         {
@@ -754,6 +981,14 @@
       "required": true,
       "types": [
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -794,11 +1029,34 @@
           "named": true
         },
         {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
           "type": "subquery",
           "named": true
         },
         {
           "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "qualified_table_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -832,6 +1090,14 @@
           "named": true
         },
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "field_access",
           "named": true
         },
@@ -849,6 +1115,10 @@
         },
         {
           "type": "star",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
           "named": true
         },
         {
@@ -923,6 +1193,103 @@
     "fields": {}
   },
   {
+    "type": "struct_field",
+    "named": true,
+    "fields": {
+      "alias": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "exists_expression",
+          "named": true
+        },
+        {
+          "type": "field_access",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
+          "type": "subquery",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "struct_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "struct_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "subquery",
     "named": true,
     "fields": {},
@@ -956,11 +1323,23 @@
         "required": true,
         "types": [
           {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
           {
+            "type": "qualified_table_name",
+            "named": true
+          },
+          {
             "type": "subquery",
+            "named": true
+          },
+          {
+            "type": "unnest_expression",
             "named": true
           }
         ]
@@ -975,6 +1354,14 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
         {
           "type": "binary_expression",
           "named": true
@@ -1013,6 +1400,81 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
+          "type": "subquery",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "unnest_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "exists_expression",
+          "named": true
+        },
+        {
+          "type": "field_access",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
           "named": true
         },
         {
@@ -1035,6 +1497,14 @@
       "required": true,
       "types": [
         {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -1072,6 +1542,10 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
           "named": true
         },
         {
@@ -1147,6 +1621,18 @@
   {
     "type": ">=",
     "named": false
+  },
+  {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
+    "type": "backtick_identifier",
+    "named": true
   },
   {
     "type": "identifier",

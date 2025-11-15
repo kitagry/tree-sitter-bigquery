@@ -63,35 +63,36 @@ This grammar is being developed incrementally in stages, from simple to complex:
 ### Stage 0: Preparation ✓
 - Documentation and project setup
 
-### Stage 1: Basic SELECT (In Progress)
+### Stage 1: Basic SELECT ✓
 - `SELECT 1`
 - `SELECT column FROM table`
 - Basic identifiers and numeric literals
 
-### Stage 2: WHERE Clause and Expressions
+### Stage 2: WHERE Clause and Expressions ✓
 - Comparison operators (=, !=, <, >, <=, >=)
 - Logical operators (AND, OR, NOT)
 - String and boolean literals
 
-### Stage 3: Aggregation and GROUP BY
+### Stage 3: Aggregation and GROUP BY ✓
 - Aggregate functions (COUNT, SUM, AVG, MIN, MAX)
 - GROUP BY and HAVING clauses
 - ORDER BY and LIMIT
 
-### Stage 4: JOIN Operations
+### Stage 4: JOIN Operations ✓
 - INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN, CROSS JOIN
 - ON conditions
 - Table and column aliases
 
-### Stage 5: Subqueries and CTEs
+### Stage 5: Subqueries and CTEs ✓
 - Subqueries in SELECT, FROM, and WHERE
 - WITH clause (Common Table Expressions)
 
-### Stage 6: BigQuery-Specific Types
+### Stage 6: BigQuery-Specific Types ✓
 - STRUCT and ARRAY types
 - Nested field access (dot notation)
 - UNNEST
 - Qualified table names
+- Backtick identifiers
 
 ### Stage 7: Window Functions
 - OVER clause

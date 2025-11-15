@@ -40,8 +40,11 @@ module.exports = grammar({
       $.function_call,
       $.field_access,
       $.subquery,
+      $.array_literal,
+      $.struct_literal,
       $.star,
       $.number_literal,
+      $.backtick_identifier,
       $.identifier
     ),
 
@@ -54,6 +57,9 @@ module.exports = grammar({
       $.join_expression,
       $.table_alias,
       $.subquery,
+      $.unnest_expression,
+      $.qualified_table_name,
+      $.backtick_identifier,
       $.identifier
     ),
 
@@ -72,6 +78,9 @@ module.exports = grammar({
       $.function_call,
       $.field_access,
       $.subquery,
+      $.array_literal,
+      $.struct_literal,
+      $.backtick_identifier,
       $.identifier,
       $.number_literal,
       $.string_literal,
@@ -178,16 +187,29 @@ module.exports = grammar({
     ),
 
     table_alias: $ => seq(
-      field('table', choice($.identifier, $.subquery)),
+      field('table', choice(
+        $.identifier,
+        $.backtick_identifier,
+        $.subquery,
+        $.unnest_expression,
+        $.qualified_table_name
+      )),
       optional(kw('AS')),
       field('alias', $.identifier)
     ),
 
-    field_access: $ => seq(
-      field('object', $.identifier),
+    field_access: $ => prec.left(seq(
+      field('object', choice(
+        $.identifier,
+        $.backtick_identifier,
+        $.field_access
+      )),
       '.',
-      field('field', $.identifier)
-    ),
+      field('field', choice(
+        $.identifier,
+        $.backtick_identifier
+      ))
+    )),
 
     // Stage 5: Subqueries and CTEs
     subquery: $ => seq(
@@ -222,6 +244,50 @@ module.exports = grammar({
       kw('EXISTS'),
       $.subquery
     ),
+
+    // Stage 6: BigQuery-specific types and syntax
+    array_literal: $ => seq(
+      '[',
+      optional(commaSep1($._expression)),
+      ']'
+    ),
+
+    struct_literal: $ => seq(
+      kw('STRUCT'),
+      '(',
+      optional(commaSep1($.struct_field)),
+      ')'
+    ),
+
+    struct_field: $ => seq(
+      $._expression,
+      kw('AS'),
+      field('alias', $.identifier)
+    ),
+
+    unnest_expression: $ => seq(
+      kw('UNNEST'),
+      '(',
+      $._expression,
+      ')'
+    ),
+
+    qualified_table_name: $ => choice(
+      seq(
+        choice($.identifier, $.backtick_identifier),
+        '.',
+        $.identifier,
+        '.',
+        $.identifier
+      ),
+      seq(
+        choice($.identifier, $.backtick_identifier),
+        '.',
+        $.identifier
+      )
+    ),
+
+    backtick_identifier: $ => /`[^`]+`/,
 
     // Primitives
     star: $ => '*',
