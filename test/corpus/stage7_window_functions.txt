@@ -1,0 +1,248 @@
+================================================================================
+Basic window function with empty OVER clause
+================================================================================
+
+SELECT AVG(salary) OVER () AS overall_avg
+FROM employees
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Window function with ORDER BY
+================================================================================
+
+SELECT ROW_NUMBER() OVER (ORDER BY salary DESC) AS rank
+FROM employees
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            (over_clause
+              (order_by_clause
+                (order_item
+                  (identifier)))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Window function with PARTITION BY
+================================================================================
+
+SELECT AVG(salary) OVER (PARTITION BY department) AS dept_avg
+FROM employees
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              (partition_by_clause
+                (identifier))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Window function with PARTITION BY and ORDER BY
+================================================================================
+
+SELECT ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank
+FROM employees
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            (over_clause
+              (partition_by_clause
+                (identifier))
+              (order_by_clause
+                (order_item
+                  (identifier)))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Multiple PARTITION BY columns
+================================================================================
+
+SELECT COUNT(*) OVER (PARTITION BY department, location) AS count
+FROM employees
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (star)
+            (over_clause
+              (partition_by_clause
+                (identifier)
+                (identifier))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Window function with ROWS BETWEEN
+================================================================================
+
+SELECT
+  SUM(revenue) OVER (
+    ORDER BY date
+    ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+  ) AS rolling_sum
+FROM sales
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              (order_by_clause
+                (order_item
+                  (identifier)))
+              (frame_clause
+                start: (frame_bound
+                  (number_literal))
+                end: (frame_bound))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Window function with UNBOUNDED PRECEDING
+================================================================================
+
+SELECT
+  SUM(revenue) OVER (
+    ORDER BY date
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) AS cumulative_sum
+FROM sales
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              (order_by_clause
+                (order_item
+                  (identifier)))
+              (frame_clause
+                start: (frame_bound)
+                end: (frame_bound))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+LAG function
+================================================================================
+
+SELECT LAG(revenue, 1) OVER (ORDER BY date) AS previous_revenue
+FROM sales
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            arguments: (number_literal)
+            (over_clause
+              (order_by_clause
+                (order_item
+                  (identifier)))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Multiple window functions in SELECT
+================================================================================
+
+SELECT
+  ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank,
+  AVG(salary) OVER (PARTITION BY department) AS dept_avg
+FROM employees
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            (over_clause
+              (partition_by_clause
+                (identifier))
+              (order_by_clause
+                (order_item
+                  (identifier)))))
+          alias: (identifier)))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              (partition_by_clause
+                (identifier))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))

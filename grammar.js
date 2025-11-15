@@ -75,6 +75,7 @@ module.exports = grammar({
       $.parenthesized_expression,
       $.in_expression,
       $.exists_expression,
+      $.window_function,
       $.function_call,
       $.field_access,
       $.subquery,
@@ -288,6 +289,47 @@ module.exports = grammar({
     ),
 
     backtick_identifier: $ => /`[^`]+`/,
+
+    // Stage 7: Window functions
+    window_function: $ => seq(
+      field('name', $.identifier),
+      '(',
+      optional(choice(
+        field('arguments', $.star),
+        field('arguments', commaSep1($._expression))
+      )),
+      ')',
+      $.over_clause
+    ),
+
+    over_clause: $ => seq(
+      kw('OVER'),
+      '(',
+      optional($.partition_by_clause),
+      optional($.order_by_clause),
+      optional($.frame_clause),
+      ')'
+    ),
+
+    partition_by_clause: $ => seq(
+      kw('PARTITION'),
+      kw('BY'),
+      commaSep1($._expression)
+    ),
+
+    frame_clause: $ => seq(
+      choice(kw('ROWS'), kw('RANGE')),
+      kw('BETWEEN'),
+      field('start', $.frame_bound),
+      kw('AND'),
+      field('end', $.frame_bound)
+    ),
+
+    frame_bound: $ => choice(
+      seq(kw('UNBOUNDED'), choice(kw('PRECEDING'), kw('FOLLOWING'))),
+      seq($.number_literal, choice(kw('PRECEDING'), kw('FOLLOWING'))),
+      seq(kw('CURRENT'), kw('ROW'))
+    ),
 
     // Primitives
     star: $ => '*',

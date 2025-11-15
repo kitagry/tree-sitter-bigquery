@@ -94,7 +94,7 @@ This grammar is being developed incrementally in stages, from simple to complex:
 - Qualified table names
 - Backtick identifiers
 
-### Stage 7: Window Functions
+### Stage 7: Window Functions ✓
 - OVER clause
 - PARTITION BY and ORDER BY in windows
 - Frame specifications
