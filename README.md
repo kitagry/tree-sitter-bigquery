@@ -109,7 +109,7 @@ This grammar is being developed incrementally in stages, from simple to complex:
 - INSERT, UPDATE, DELETE, MERGE
 - DECLARE and SET
 
-### Stage 10: Advanced Features
+### Stage 10: Advanced Features ✓
 - User-Defined Functions (UDFs)
 - CASE expressions
 - CAST and SAFE_CAST

@@ -1,0 +1,209 @@
+================================================================================
+CASE expression (searched)
+================================================================================
+
+SELECT
+  CASE
+    WHEN age < 18 THEN 'minor'
+    ELSE 'adult'
+  END AS age_group
+FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (case_expression
+            (when_clause
+              condition: (binary_expression
+                left: (identifier)
+                right: (number_literal))
+              result: (string_literal))
+            (else_clause
+              (string_literal)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+CASE expression (simple)
+================================================================================
+
+SELECT
+  CASE status
+    WHEN 'active' THEN 'Active'
+    ELSE 'Other'
+  END AS label
+FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (case_expression
+            value: (identifier)
+            (when_clause
+              condition: (string_literal)
+              result: (string_literal))
+            (else_clause
+              (string_literal)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+CAST expression
+================================================================================
+
+SELECT CAST(price AS INT64) FROM products
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (cast_expression
+          (identifier)
+          (type))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+SAFE_CAST expression
+================================================================================
+
+SELECT SAFE_CAST(value AS STRING) FROM data
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (cast_expression
+          (identifier)
+          (type))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Arithmetic addition
+================================================================================
+
+SELECT price + tax FROM orders
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (binary_expression
+          left: (identifier)
+          right: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Arithmetic multiplication
+================================================================================
+
+SELECT quantity * price FROM orders
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (binary_expression
+          left: (identifier)
+          right: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+BETWEEN operator
+================================================================================
+
+SELECT * FROM products WHERE price BETWEEN 100 AND 500
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (between_expression
+        (identifier)
+        (number_literal)
+        (number_literal)))))
+
+================================================================================
+LIKE operator
+================================================================================
+
+SELECT * FROM users WHERE name LIKE 'John%'
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (string_literal)))))
+
+================================================================================
+IS NULL
+================================================================================
+
+SELECT * FROM users WHERE email IS NULL
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (is_null_expression
+        (identifier)))))
+
+================================================================================
+IS NOT NULL
+================================================================================
+
+SELECT * FROM users WHERE email IS NOT NULL
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (is_null_expression
+        (identifier)))))

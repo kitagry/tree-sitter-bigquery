@@ -46,6 +46,9 @@ module.exports = grammar({
 
     select_item: $ => choice(
       $.alias,
+      $.case_expression,
+      $.cast_expression,
+      $.binary_expression,
       $.function_call,
       $.field_access,
       $.subquery,
@@ -84,6 +87,10 @@ module.exports = grammar({
       $.parenthesized_expression,
       $.in_expression,
       $.exists_expression,
+      $.between_expression,
+      $.is_null_expression,
+      $.case_expression,
+      $.cast_expression,
       $.window_function,
       $.function_call,
       $.field_access,
@@ -111,10 +118,22 @@ module.exports = grammar({
         kw('AND'),
         field('right', $._expression)
       )),
-      // Comparison operators have higher precedence than AND/OR
+      // Comparison operators and LIKE have higher precedence than AND/OR
       prec.left(3, seq(
         field('left', $._expression),
-        choice('=', '!=', '<', '>', '<=', '>='),
+        choice('=', '!=', '<', '>', '<=', '>=', kw('LIKE')),
+        field('right', $._expression)
+      )),
+      // Addition and subtraction
+      prec.left(5, seq(
+        field('left', $._expression),
+        choice('+', '-'),
+        field('right', $._expression)
+      )),
+      // Multiplication, division, and modulo have highest precedence
+      prec.left(6, seq(
+        field('left', $._expression),
+        choice('*', '/', '%'),
         field('right', $._expression)
       ))
     ),
@@ -492,6 +511,51 @@ module.exports = grammar({
       field('column', $.identifier),
       '=',
       field('value', $._expression)
+    ),
+
+    // Stage 10: Advanced features
+    case_expression: $ => seq(
+      kw('CASE'),
+      optional(field('value', $._expression)),
+      repeat1($.when_clause),
+      optional($.else_clause),
+      kw('END')
+    ),
+
+    when_clause: $ => seq(
+      kw('WHEN'),
+      field('condition', $._expression),
+      kw('THEN'),
+      field('result', $._expression)
+    ),
+
+    else_clause: $ => seq(
+      kw('ELSE'),
+      $._expression
+    ),
+
+    cast_expression: $ => seq(
+      choice(kw('CAST'), kw('SAFE_CAST')),
+      '(',
+      $._expression,
+      kw('AS'),
+      $.type,
+      ')'
+    ),
+
+    between_expression: $ => seq(
+      $._expression,
+      kw('BETWEEN'),
+      $._expression,
+      kw('AND'),
+      $._expression
+    ),
+
+    is_null_expression: $ => seq(
+      $._expression,
+      kw('IS'),
+      optional(kw('NOT')),
+      kw('NULL')
     ),
 
     // Primitives

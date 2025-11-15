@@ -27,11 +27,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -52,6 +64,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -102,11 +118,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -127,6 +155,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -187,11 +219,23 @@
             "named": true
           },
           {
+            "type": "between_expression",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
           {
             "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "case_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
             "named": true
           },
           {
@@ -212,6 +256,10 @@
           },
           {
             "type": "in_expression",
+            "named": true
+          },
+          {
+            "type": "is_null_expression",
             "named": true
           },
           {
@@ -247,6 +295,97 @@
     }
   },
   {
+    "type": "between_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "between_expression",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
+          "named": true
+        },
+        {
+          "type": "exists_expression",
+          "named": true
+        },
+        {
+          "type": "field_access",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
+          "type": "subquery",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "window_function",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "binary_expression",
     "named": true,
     "fields": {
@@ -263,11 +402,23 @@
             "named": true
           },
           {
+            "type": "between_expression",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
           {
             "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "case_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
             "named": true
           },
           {
@@ -288,6 +439,10 @@
           },
           {
             "type": "in_expression",
+            "named": true
+          },
+          {
+            "type": "is_null_expression",
             "named": true
           },
           {
@@ -333,11 +488,23 @@
             "named": true
           },
           {
+            "type": "between_expression",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
           {
             "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "case_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
             "named": true
           },
           {
@@ -358,6 +525,10 @@
           },
           {
             "type": "in_expression",
+            "named": true
+          },
+          {
+            "type": "is_null_expression",
             "named": true
           },
           {
@@ -396,6 +567,207 @@
     "type": "boolean_literal",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "case_expression",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
+            "type": "between_expression",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "case_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "exists_expression",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "in_expression",
+            "named": true
+          },
+          {
+            "type": "is_null_expression",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "subquery",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "window_function",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "else_clause",
+          "named": true
+        },
+        {
+          "type": "when_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cast_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "between_expression",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
+          "named": true
+        },
+        {
+          "type": "exists_expression",
+          "named": true
+        },
+        {
+          "type": "field_access",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
+          "type": "subquery",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "window_function",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "column_definition",
@@ -634,6 +1006,97 @@
     }
   },
   {
+    "type": "else_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "between_expression",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
+          "named": true
+        },
+        {
+          "type": "exists_expression",
+          "named": true
+        },
+        {
+          "type": "field_access",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
+          "type": "subquery",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "window_function",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "exists_expression",
     "named": true,
     "fields": {},
@@ -787,11 +1250,23 @@
             "named": true
           },
           {
+            "type": "between_expression",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
           {
             "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "case_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
             "named": true
           },
           {
@@ -812,6 +1287,10 @@
           },
           {
             "type": "in_expression",
+            "named": true
+          },
+          {
+            "type": "is_null_expression",
             "named": true
           },
           {
@@ -877,11 +1356,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -902,6 +1393,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -952,11 +1447,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -977,6 +1484,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -1027,11 +1538,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -1052,6 +1575,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -1122,6 +1649,97 @@
         },
         {
           "type": "values_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "is_null_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "between_expression",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
+          "named": true
+        },
+        {
+          "type": "exists_expression",
+          "named": true
+        },
+        {
+          "type": "field_access",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_literal",
+          "named": true
+        },
+        {
+          "type": "subquery",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "window_function",
           "named": true
         }
       ]
@@ -1243,11 +1861,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -1268,6 +1898,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -1333,11 +1967,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -1358,6 +2004,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -1431,11 +2081,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -1456,6 +2118,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -1506,11 +2172,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -1531,6 +2209,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -1616,6 +2298,18 @@
         },
         {
           "type": "backtick_identifier",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -1752,6 +2446,11 @@
     }
   },
   {
+    "type": "star",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "string_literal",
     "named": true,
     "fields": {}
@@ -1784,11 +2483,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -1809,6 +2520,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -1980,11 +2695,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -2005,6 +2732,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -2055,11 +2786,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -2080,6 +2823,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -2168,11 +2915,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -2193,6 +2952,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -2242,6 +3005,184 @@
     }
   },
   {
+    "type": "when_clause",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
+            "type": "between_expression",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "case_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "exists_expression",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "in_expression",
+            "named": true
+          },
+          {
+            "type": "is_null_expression",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "subquery",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "window_function",
+            "named": true
+          }
+        ]
+      },
+      "result": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "backtick_identifier",
+            "named": true
+          },
+          {
+            "type": "between_expression",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "case_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "exists_expression",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "in_expression",
+            "named": true
+          },
+          {
+            "type": "is_null_expression",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "subquery",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "window_function",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "where_clause",
     "named": true,
     "fields": {},
@@ -2258,11 +3199,23 @@
           "named": true
         },
         {
+          "type": "between_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
           "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -2283,6 +3236,10 @@
         },
         {
           "type": "in_expression",
+          "named": true
+        },
+        {
+          "type": "is_null_expression",
           "named": true
         },
         {
@@ -2337,11 +3294,23 @@
             "named": true
           },
           {
+            "type": "between_expression",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
           {
             "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "case_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
             "named": true
           },
           {
@@ -2362,6 +3331,10 @@
           },
           {
             "type": "in_expression",
+            "named": true
+          },
+          {
+            "type": "is_null_expression",
             "named": true
           },
           {
@@ -2444,6 +3417,10 @@
     "named": false
   },
   {
+    "type": "%",
+    "named": false
+  },
+  {
     "type": "'",
     "named": false
   },
@@ -2456,11 +3433,27 @@
     "named": false
   },
   {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "+",
+    "named": false
+  },
+  {
     "type": ",",
     "named": false
   },
   {
+    "type": "-",
+    "named": false
+  },
+  {
     "type": ".",
+    "named": false
+  },
+  {
+    "type": "/",
     "named": false
   },
   {
@@ -2501,10 +3494,6 @@
   },
   {
     "type": "number_literal",
-    "named": true
-  },
-  {
-    "type": "star",
     "named": true
   }
 ]
