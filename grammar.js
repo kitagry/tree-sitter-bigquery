@@ -41,7 +41,7 @@ module.exports = grammar({
 
     select_clause: $ => seq(
       kw('SELECT'),
-      commaSep1($.select_item)
+      commaSep1Trailing($.select_item)
     ),
 
     select_item: $ => choice(
@@ -587,4 +587,9 @@ function kw(keyword) {
 // Helper function for comma-separated lists (at least one item)
 function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
+}
+
+// Helper function for comma-separated lists with optional trailing comma (BigQuery specific)
+function commaSep1Trailing(rule) {
+  return seq(rule, repeat(seq(',', rule)), optional(','));
 }

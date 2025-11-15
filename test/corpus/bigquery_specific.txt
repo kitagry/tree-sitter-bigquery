@@ -1,0 +1,37 @@
+================================================================================
+Trailing comma in SELECT (BigQuery specific)
+================================================================================
+
+SELECT a, b, FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Trailing comma in SELECT with multiple items
+================================================================================
+
+SELECT id, name, email, FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))))
