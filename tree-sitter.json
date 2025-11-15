@@ -1,0 +1,39 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "bigquery",
+      "camelcase": "BigQuery",
+      "title": "BigQuery",
+      "scope": "source.bigquery",
+      "file-types": [
+        "bigquery"
+      ],
+      "injection-regex": "^bigquery$",
+      "class-name": "TreeSitterBigquery"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "TreeSitter parser for BigQuery",
+    "authors": [
+      {
+        "name": "Ryo Kitagawa",
+        "email": "kitadrum50@gmail.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/kitagry/tree-sitter-bigquery"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
