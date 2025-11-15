@@ -1,0 +1,165 @@
+================================================================================
+UNION ALL
+================================================================================
+
+SELECT id FROM users
+UNION ALL
+SELECT id FROM customers
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set_operation
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))))
+
+================================================================================
+UNION DISTINCT
+================================================================================
+
+SELECT id FROM users
+UNION DISTINCT
+SELECT id FROM customers
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set_operation
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))))
+
+================================================================================
+INTERSECT DISTINCT
+================================================================================
+
+SELECT id FROM users
+INTERSECT DISTINCT
+SELECT id FROM customers
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set_operation
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))))
+
+================================================================================
+EXCEPT DISTINCT
+================================================================================
+
+SELECT id FROM users
+EXCEPT DISTINCT
+SELECT id FROM customers
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set_operation
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))))
+
+================================================================================
+Multiple UNION operations
+================================================================================
+
+SELECT id FROM users
+UNION ALL
+SELECT id FROM customers
+UNION ALL
+SELECT id FROM partners
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set_operation
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))
+    (set_operation
+      (select_statement
+        (select_clause
+          (select_item
+            (identifier)))
+        (from_clause
+          (identifier)))
+      (select_statement
+        (select_clause
+          (select_item
+            (identifier)))
+        (from_clause
+          (identifier))))))
+
+================================================================================
+Mixed set operations with parentheses
+================================================================================
+
+(SELECT id FROM users UNION ALL SELECT id FROM customers)
+INTERSECT DISTINCT
+SELECT id FROM partners
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set_operation
+    (set_operation
+      (select_statement
+        (select_clause
+          (select_item
+            (identifier)))
+        (from_clause
+          (identifier)))
+      (select_statement
+        (select_clause
+          (select_item
+            (identifier)))
+        (from_clause
+          (identifier))))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))))

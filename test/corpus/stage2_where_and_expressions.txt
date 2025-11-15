@@ -182,14 +182,13 @@ SELECT * FROM users WHERE (age > 18 AND age < 65) OR status = retired
       (identifier))
     (where_clause
       (binary_expression
-        left: (parenthesized_expression
-          (binary_expression
-            left: (binary_expression
-              left: (identifier)
-              right: (number_literal))
-            right: (binary_expression
-              left: (identifier)
-              right: (number_literal))))
+        left: (binary_expression
+          left: (binary_expression
+            left: (identifier)
+            right: (number_literal))
+          right: (binary_expression
+            left: (identifier)
+            right: (number_literal)))
         right: (binary_expression
           left: (identifier)
           right: (identifier))))))
@@ -216,14 +215,13 @@ WHERE (role = admin OR role = moderator) AND active = TRUE AND NOT deleted
     (where_clause
       (binary_expression
         left: (binary_expression
-          left: (parenthesized_expression
-            (binary_expression
-              left: (binary_expression
-                left: (identifier)
-                right: (identifier))
-              right: (binary_expression
-                left: (identifier)
-                right: (identifier))))
+          left: (binary_expression
+            left: (binary_expression
+              left: (identifier)
+              right: (identifier))
+            right: (binary_expression
+              left: (identifier)
+              right: (identifier)))
           right: (binary_expression
             left: (identifier)
             right: (boolean_literal)))

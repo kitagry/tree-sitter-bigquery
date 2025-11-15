@@ -18,6 +18,7 @@ module.exports = grammar({
   rules: {
     // Stage 1: Basic SELECT statement
     source_file: $ => repeat(choice(
+      $.set_operation,
       $.select_statement,
       $.create_table_statement,
       $.create_view_statement,
@@ -36,15 +37,23 @@ module.exports = grammar({
       optional($.group_by_clause),
       optional($.having_clause),
       optional($.order_by_clause),
-      optional($.limit_clause)
+      optional($.limit_clause),
     ),
 
     select_clause: $ => seq(
       kw('SELECT'),
-      commaSep1Trailing($.select_item)
+      optional(choice(kw('DISTINCT'), kw('ALL'))),
+      // 項目リストの定義を簡素化し、優先度で曖昧さを解消する
+      prec.right(
+        seq(
+          $.select_item,
+          repeat(seq(',', $.select_item)),
+          optional(',') // 末尾のコンマを許可
+        )
+      )
     ),
 
-    select_item: $ => choice(
+    select_item: $ => prec.right(0, choice(
       $.alias,
       $.case_expression,
       $.cast_expression,
@@ -58,7 +67,7 @@ module.exports = grammar({
       $.number_literal,
       $.backtick_identifier,
       $.identifier
-    ),
+    )),
 
     from_clause: $ => seq(
       kw('FROM'),
@@ -81,10 +90,9 @@ module.exports = grammar({
       $._expression
     ),
 
-    _expression: $ => choice(
+    _expression: $ => optionalParenthesis(choice(
       $.binary_expression,
       $.unary_expression,
-      $.parenthesized_expression,
       $.in_expression,
       $.exists_expression,
       $.between_expression,
@@ -102,7 +110,7 @@ module.exports = grammar({
       $.number_literal,
       $.string_literal,
       $.boolean_literal
-    ),
+    )),
 
     // Binary expressions with precedence
     // OR has lowest precedence
@@ -152,7 +160,7 @@ module.exports = grammar({
     ),
 
     // Stage 3: Aggregation, GROUP BY, HAVING, ORDER BY, LIMIT
-    function_call: $ => seq(
+    function_call: $ => prec(7, seq(
       field('name', $.identifier),
       '(',
       field('arguments', optional(choice(
@@ -160,7 +168,7 @@ module.exports = grammar({
         commaSep1($._expression)
       ))),
       ')'
-    ),
+    )),
 
     alias: $ => seq(
       $._expression,
@@ -194,6 +202,25 @@ module.exports = grammar({
       kw('LIMIT'),
       $.number_literal
     ),
+
+    // Set operations (UNION, INTERSECT, EXCEPT)
+    set_operation: $ => prec.left(seq(
+      optionalParenthesis(choice($.select_statement, $.set_operation)),
+      repeat1(
+        seq(
+          choice(
+            seq(kw('UNION'), choice(kw('ALL'), kw('DISTINCT'))),
+            seq(kw('UNION'), kw('ALL')),
+            kw('UNION'),
+            seq(kw('INTERSECT'), kw('DISTINCT')),
+            kw('INTERSECT'),
+            seq(kw('EXCEPT'), kw('DISTINCT')),
+            kw('EXCEPT')
+          ),
+          optionalParenthesis(choice($.select_statement, $.set_operation)),
+        )
+      )
+    )),
 
     // Stage 4: JOIN operations
     join_expression: $ => prec.left(seq(
@@ -319,7 +346,7 @@ module.exports = grammar({
     backtick_identifier: $ => /`[^`]+`/,
 
     // Stage 7: Window functions
-    window_function: $ => seq(
+    window_function: $ => prec(8, seq(
       field('name', $.identifier),
       '(',
       optional(choice(
@@ -328,7 +355,7 @@ module.exports = grammar({
       )),
       ')',
       $.over_clause
-    ),
+    )),
 
     over_clause: $ => seq(
       kw('OVER'),
@@ -589,7 +616,18 @@ function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
 }
 
-// Helper function for comma-separated lists with optional trailing comma (BigQuery specific)
-function commaSep1Trailing(rule) {
-  return seq(rule, repeat(seq(',', rule)), optional(','));
+function optionalParenthesis(node) {
+  return prec.right(
+    choice(
+      node,
+      wrappedInParenthesis(node),
+    ),
+  )
+}
+
+function wrappedInParenthesis(node) {
+  if (node) {
+    return seq("(", node, ")");
+  }
+  return seq("(", ")");
 }

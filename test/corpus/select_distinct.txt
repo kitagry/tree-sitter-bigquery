@@ -1,0 +1,51 @@
+================================================================================
+SELECT DISTINCT
+================================================================================
+
+SELECT DISTINCT name FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))))
+
+================================================================================
+SELECT DISTINCT with multiple columns
+================================================================================
+
+SELECT DISTINCT name, email FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))))
+
+================================================================================
+SELECT ALL (explicit)
+================================================================================
+
+SELECT ALL id, name FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))))
