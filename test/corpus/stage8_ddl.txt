@@ -1,0 +1,201 @@
+================================================================================
+Simple CREATE TABLE
+================================================================================
+
+CREATE TABLE dataset.users (
+  id INT64,
+  name STRING
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))
+    (column_definitions
+      (column_definition
+        name: (identifier)
+        type: (type))
+      (column_definition
+        name: (identifier)
+        type: (type)))))
+
+================================================================================
+CREATE OR REPLACE TABLE
+================================================================================
+
+CREATE OR REPLACE TABLE dataset.temp (
+  id INT64
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))
+    (column_definitions
+      (column_definition
+        name: (identifier)
+        type: (type)))))
+
+================================================================================
+CREATE TABLE AS SELECT
+================================================================================
+
+CREATE TABLE dataset.active_users AS
+SELECT * FROM users WHERE active = TRUE
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))
+    (select_statement
+      (select_clause
+        (select_item
+          (star)))
+      (from_clause
+        (identifier))
+      (where_clause
+        (binary_expression
+          left: (identifier)
+          right: (boolean_literal))))))
+
+================================================================================
+CREATE OR REPLACE TABLE AS SELECT
+================================================================================
+
+CREATE OR REPLACE TABLE dataset.summary AS
+SELECT category, COUNT(*) AS count FROM products GROUP BY category
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))
+        (select_item
+          (alias
+            (function_call
+              name: (identifier)
+              arguments: (star))
+            alias: (identifier))))
+      (from_clause
+        (identifier))
+      (group_by_clause
+        (identifier)))))
+
+================================================================================
+Simple CREATE VIEW
+================================================================================
+
+CREATE VIEW dataset.active_users_view AS
+SELECT * FROM users WHERE active = TRUE
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_view_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))
+    (select_statement
+      (select_clause
+        (select_item
+          (star)))
+      (from_clause
+        (identifier))
+      (where_clause
+        (binary_expression
+          left: (identifier)
+          right: (boolean_literal))))))
+
+================================================================================
+CREATE OR REPLACE VIEW
+================================================================================
+
+CREATE OR REPLACE VIEW dataset.user_summary AS
+SELECT id, name FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_view_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))
+        (select_item
+          (identifier)))
+      (from_clause
+        (identifier)))))
+
+================================================================================
+DROP TABLE
+================================================================================
+
+DROP TABLE dataset.old_table
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (drop_table_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))))
+
+================================================================================
+DROP TABLE IF EXISTS
+================================================================================
+
+DROP TABLE IF EXISTS dataset.temp_table
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (drop_table_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))))
+
+================================================================================
+DROP VIEW
+================================================================================
+
+DROP VIEW dataset.old_view
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (drop_view_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))))
+
+================================================================================
+DROP VIEW IF EXISTS
+================================================================================
+
+DROP VIEW IF EXISTS dataset.temp_view
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (drop_view_statement
+    name: (qualified_table_name
+      (identifier)
+      (identifier))))

@@ -99,7 +99,7 @@ This grammar is being developed incrementally in stages, from simple to complex:
 - PARTITION BY and ORDER BY in windows
 - Frame specifications
 
-### Stage 8: DDL Statements
+### Stage 8: DDL Statements ✓
 - CREATE TABLE / CREATE OR REPLACE TABLE
 - CREATE VIEW
 - ALTER TABLE

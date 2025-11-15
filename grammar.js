@@ -17,7 +17,13 @@ module.exports = grammar({
 
   rules: {
     // Stage 1: Basic SELECT statement
-    source_file: $ => repeat($.select_statement),
+    source_file: $ => repeat(choice(
+      $.select_statement,
+      $.create_table_statement,
+      $.create_view_statement,
+      $.drop_table_statement,
+      $.drop_view_statement
+    )),
 
     select_statement: $ => seq(
       optional($.with_clause),
@@ -329,6 +335,94 @@ module.exports = grammar({
       seq(kw('UNBOUNDED'), choice(kw('PRECEDING'), kw('FOLLOWING'))),
       seq($.number_literal, choice(kw('PRECEDING'), kw('FOLLOWING'))),
       seq(kw('CURRENT'), kw('ROW'))
+    ),
+
+    // Stage 8: DDL statements
+    create_table_statement: $ => seq(
+      kw('CREATE'),
+      optional(seq(kw('OR'), kw('REPLACE'))),
+      kw('TABLE'),
+      field('name', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      choice(
+        seq(
+          '(',
+          $.column_definitions,
+          ')'
+        ),
+        seq(
+          kw('AS'),
+          $.select_statement
+        )
+      )
+    ),
+
+    create_view_statement: $ => seq(
+      kw('CREATE'),
+      optional(seq(kw('OR'), kw('REPLACE'))),
+      kw('VIEW'),
+      field('name', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      kw('AS'),
+      $.select_statement
+    ),
+
+    drop_table_statement: $ => seq(
+      kw('DROP'),
+      kw('TABLE'),
+      optional(seq(kw('IF'), kw('EXISTS'))),
+      field('name', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      ))
+    ),
+
+    drop_view_statement: $ => seq(
+      kw('DROP'),
+      kw('VIEW'),
+      optional(seq(kw('IF'), kw('EXISTS'))),
+      field('name', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      ))
+    ),
+
+    column_definitions: $ => commaSep1($.column_definition),
+
+    column_definition: $ => seq(
+      field('name', $.identifier),
+      field('type', $.type)
+    ),
+
+    type: $ => choice(
+      // Simple types
+      kw('INT64'),
+      kw('FLOAT64'),
+      kw('STRING'),
+      kw('BOOL'),
+      kw('BYTES'),
+      kw('DATE'),
+      kw('DATETIME'),
+      kw('TIME'),
+      kw('TIMESTAMP'),
+      // Complex types (simplified for now)
+      seq(kw('ARRAY'), '<', $.type, '>'),
+      seq(kw('STRUCT'), '<', commaSep1($.struct_type_field), '>'),
+      // Generic identifier for custom types
+      $.identifier
+    ),
+
+    struct_type_field: $ => seq(
+      optional(seq(field('name', $.identifier), optional(kw('AS')))),
+      field('type', $.type)
     ),
 
     // Primitives
