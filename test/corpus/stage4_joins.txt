@@ -1,0 +1,279 @@
+================================================================================
+INNER JOIN
+================================================================================
+
+SELECT * FROM users INNER JOIN orders ON users.id = orders.user_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (join_expression
+        left: (identifier)
+        right: (identifier)
+        (on_clause
+          (binary_expression
+            left: (field_access
+              object: (identifier)
+              field: (identifier))
+            right: (field_access
+              object: (identifier)
+              field: (identifier))))))))
+
+================================================================================
+Simple JOIN (implicit INNER)
+================================================================================
+
+SELECT * FROM users JOIN orders ON users.id = orders.user_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (join_expression
+        left: (identifier)
+        right: (identifier)
+        (on_clause
+          (binary_expression
+            left: (field_access
+              object: (identifier)
+              field: (identifier))
+            right: (field_access
+              object: (identifier)
+              field: (identifier))))))))
+
+================================================================================
+LEFT JOIN
+================================================================================
+
+SELECT * FROM users LEFT JOIN orders ON users.id = orders.user_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (join_expression
+        left: (identifier)
+        right: (identifier)
+        (on_clause
+          (binary_expression
+            left: (field_access
+              object: (identifier)
+              field: (identifier))
+            right: (field_access
+              object: (identifier)
+              field: (identifier))))))))
+
+================================================================================
+LEFT OUTER JOIN
+================================================================================
+
+SELECT * FROM users LEFT OUTER JOIN orders ON users.id = orders.user_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (join_expression
+        left: (identifier)
+        right: (identifier)
+        (on_clause
+          (binary_expression
+            left: (field_access
+              object: (identifier)
+              field: (identifier))
+            right: (field_access
+              object: (identifier)
+              field: (identifier))))))))
+
+================================================================================
+CROSS JOIN
+================================================================================
+
+SELECT * FROM users CROSS JOIN products
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (join_expression
+        left: (identifier)
+        right: (identifier)))))
+
+================================================================================
+Table alias with AS
+================================================================================
+
+SELECT u.name
+FROM users AS u
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (field_access
+          object: (identifier)
+          field: (identifier))))
+    (from_clause
+      (table_alias
+        table: (identifier)
+        alias: (identifier)))))
+
+================================================================================
+Table alias without AS
+================================================================================
+
+SELECT u.name
+FROM users u
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (field_access
+          object: (identifier)
+          field: (identifier))))
+    (from_clause
+      (table_alias
+        table: (identifier)
+        alias: (identifier)))))
+
+================================================================================
+JOIN with table aliases
+================================================================================
+
+SELECT u.name, o.amount
+FROM users AS u
+JOIN orders AS o ON u.id = o.user_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (field_access
+          object: (identifier)
+          field: (identifier)))
+      (select_item
+        (field_access
+          object: (identifier)
+          field: (identifier))))
+    (from_clause
+      (join_expression
+        left: (table_alias
+          table: (identifier)
+          alias: (identifier))
+        right: (table_alias
+          table: (identifier)
+          alias: (identifier))
+        (on_clause
+          (binary_expression
+            left: (field_access
+              object: (identifier)
+              field: (identifier))
+            right: (field_access
+              object: (identifier)
+              field: (identifier))))))))
+
+================================================================================
+Multiple JOINs
+================================================================================
+
+SELECT * FROM users u JOIN orders o ON u.id = o.user_id JOIN products p ON o.product_id = p.id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (join_expression
+        left: (join_expression
+          left: (table_alias
+            table: (identifier)
+            alias: (identifier))
+          right: (table_alias
+            table: (identifier)
+            alias: (identifier))
+          (on_clause
+            (binary_expression
+              left: (field_access
+                object: (identifier)
+                field: (identifier))
+              right: (field_access
+                object: (identifier)
+                field: (identifier)))))
+        right: (table_alias
+          table: (identifier)
+          alias: (identifier))
+        (on_clause
+          (binary_expression
+            left: (field_access
+              object: (identifier)
+              field: (identifier))
+            right: (field_access
+              object: (identifier)
+              field: (identifier))))))))
+
+================================================================================
+Complex JOIN condition with AND
+================================================================================
+
+SELECT * FROM users u JOIN orders o ON u.id = o.user_id AND o.status = active
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (join_expression
+        left: (table_alias
+          table: (identifier)
+          alias: (identifier))
+        right: (table_alias
+          table: (identifier)
+          alias: (identifier))
+        (on_clause
+          (binary_expression
+            left: (binary_expression
+              left: (field_access
+                object: (identifier)
+                field: (identifier))
+              right: (field_access
+                object: (identifier)
+                field: (identifier)))
+            right: (binary_expression
+              left: (field_access
+                object: (identifier)
+                field: (identifier))
+              right: (identifier))))))))

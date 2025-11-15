@@ -1,0 +1,231 @@
+================================================================================
+WHERE with simple equality comparison
+================================================================================
+
+SELECT id FROM users WHERE id = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (number_literal)))))
+
+================================================================================
+WHERE with greater than
+================================================================================
+
+SELECT * FROM products WHERE price > 100
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (number_literal)))))
+
+================================================================================
+WHERE with not equal
+================================================================================
+
+SELECT * FROM products WHERE stock != 0
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (number_literal)))))
+
+================================================================================
+WHERE with AND operator
+================================================================================
+
+SELECT * FROM users WHERE age > 18 AND active = TRUE
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (binary_expression
+          left: (identifier)
+          right: (number_literal))
+        right: (binary_expression
+          left: (identifier)
+          right: (boolean_literal))))))
+
+================================================================================
+WHERE with OR operator
+================================================================================
+
+SELECT * FROM users WHERE role = admin OR role = moderator
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (binary_expression
+          left: (identifier)
+          right: (identifier))
+        right: (binary_expression
+          left: (identifier)
+          right: (identifier))))))
+
+================================================================================
+WHERE with NOT operator
+================================================================================
+
+SELECT * FROM users WHERE NOT deleted
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (unary_expression
+        (identifier)))))
+
+================================================================================
+WHERE with string literal (single quotes)
+================================================================================
+
+SELECT * FROM users WHERE name = 'John'
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (string_literal)))))
+
+================================================================================
+WHERE with string literal (double quotes)
+================================================================================
+
+SELECT * FROM users WHERE email = "john@example.com"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (string_literal)))))
+
+================================================================================
+WHERE with parentheses for precedence
+================================================================================
+
+SELECT * FROM users WHERE (age > 18 AND age < 65) OR status = retired
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (parenthesized_expression
+          (binary_expression
+            left: (binary_expression
+              left: (identifier)
+              right: (number_literal))
+            right: (binary_expression
+              left: (identifier)
+              right: (number_literal))))
+        right: (binary_expression
+          left: (identifier)
+          right: (identifier))))))
+
+================================================================================
+WHERE with complex conditions
+================================================================================
+
+SELECT id, name
+FROM users
+WHERE (role = admin OR role = moderator) AND active = TRUE AND NOT deleted
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (binary_expression
+          left: (parenthesized_expression
+            (binary_expression
+              left: (binary_expression
+                left: (identifier)
+                right: (identifier))
+              right: (binary_expression
+                left: (identifier)
+                right: (identifier))))
+          right: (binary_expression
+            left: (identifier)
+            right: (boolean_literal)))
+        right: (unary_expression
+          (identifier))))))

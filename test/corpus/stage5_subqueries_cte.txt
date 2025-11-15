@@ -1,0 +1,200 @@
+================================================================================
+Subquery in SELECT clause
+================================================================================
+
+SELECT
+  id,
+  (SELECT COUNT(*) FROM orders WHERE user_id = users.id) AS count
+FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (subquery
+            (select_statement
+              (select_clause
+                (select_item
+                  (function_call
+                    name: (identifier)
+                    arguments: (star))))
+              (from_clause
+                (identifier))
+              (where_clause
+                (binary_expression
+                  left: (identifier)
+                  right: (field_access
+                    object: (identifier)
+                    field: (identifier))))))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Subquery in FROM clause
+================================================================================
+
+SELECT *
+FROM (SELECT id, name FROM users WHERE active = TRUE) AS active_users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (table_alias
+        table: (subquery
+          (select_statement
+            (select_clause
+              (select_item
+                (identifier))
+              (select_item
+                (identifier)))
+            (from_clause
+              (identifier))
+            (where_clause
+              (binary_expression
+                left: (identifier)
+                right: (boolean_literal)))))
+        alias: (identifier)))))
+
+================================================================================
+Subquery in WHERE with IN
+================================================================================
+
+SELECT * FROM users WHERE id IN (SELECT user_id FROM orders)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (in_expression
+        (identifier)
+        (subquery
+          (select_statement
+            (select_clause
+              (select_item
+                (identifier)))
+            (from_clause
+              (identifier))))))))
+
+================================================================================
+Subquery in WHERE with EXISTS
+================================================================================
+
+SELECT * FROM users WHERE EXISTS (SELECT 1 FROM orders WHERE user_id = users.id)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (exists_expression
+        (subquery
+          (select_statement
+            (select_clause
+              (select_item
+                (number_literal)))
+            (from_clause
+              (identifier))
+            (where_clause
+              (binary_expression
+                left: (identifier)
+                right: (field_access
+                  object: (identifier)
+                  field: (identifier))))))))))
+
+================================================================================
+Simple CTE
+================================================================================
+
+WITH active_users AS (SELECT * FROM users WHERE active = TRUE)
+SELECT * FROM active_users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (with_clause
+      (cte
+        name: (identifier)
+        (select_statement
+          (select_clause
+            (select_item
+              (star)))
+          (from_clause
+            (identifier))
+          (where_clause
+            (binary_expression
+              left: (identifier)
+              right: (boolean_literal))))))
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Multiple CTEs
+================================================================================
+
+WITH
+  users_cte AS (SELECT * FROM users),
+  orders_cte AS (SELECT * FROM orders)
+SELECT * FROM users_cte JOIN orders_cte ON users_cte.id = orders_cte.user_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (with_clause
+      (cte
+        name: (identifier)
+        (select_statement
+          (select_clause
+            (select_item
+              (star)))
+          (from_clause
+            (identifier))))
+      (cte
+        name: (identifier)
+        (select_statement
+          (select_clause
+            (select_item
+              (star)))
+          (from_clause
+            (identifier)))))
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (join_expression
+        left: (identifier)
+        right: (identifier)
+        (on_clause
+          (binary_expression
+            left: (field_access
+              object: (identifier)
+              field: (identifier))
+            right: (field_access
+              object: (identifier)
+              field: (identifier))))))))

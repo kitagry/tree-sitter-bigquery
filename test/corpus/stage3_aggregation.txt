@@ -1,0 +1,315 @@
+================================================================================
+COUNT with star
+================================================================================
+
+SELECT COUNT(*) FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (function_call
+          name: (identifier)
+          arguments: (star))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+COUNT with column
+================================================================================
+
+SELECT COUNT(id) FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (function_call
+          name: (identifier)
+          arguments: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Multiple aggregate functions
+================================================================================
+
+SELECT COUNT(*), SUM(amount), AVG(price) FROM products
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (function_call
+          name: (identifier)
+          arguments: (star)))
+      (select_item
+        (function_call
+          name: (identifier)
+          arguments: (identifier)))
+      (select_item
+        (function_call
+          name: (identifier)
+          arguments: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Aggregate function with alias
+================================================================================
+
+SELECT COUNT(*) AS total FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (function_call
+            name: (identifier)
+            arguments: (star))
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Column with alias
+================================================================================
+
+SELECT name AS user_name FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (alias
+          (identifier)
+          alias: (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+GROUP BY single column
+================================================================================
+
+SELECT status, COUNT(*) FROM users GROUP BY status
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (function_call
+          name: (identifier)
+          arguments: (star))))
+    (from_clause
+      (identifier))
+    (group_by_clause
+      (identifier))))
+
+================================================================================
+GROUP BY multiple columns
+================================================================================
+
+SELECT category, year, SUM(revenue) FROM sales GROUP BY category, year
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (function_call
+          name: (identifier)
+          arguments: (identifier))))
+    (from_clause
+      (identifier))
+    (group_by_clause
+      (identifier)
+      (identifier))))
+
+================================================================================
+HAVING clause
+================================================================================
+
+SELECT status, COUNT(*) FROM users GROUP BY status HAVING COUNT(*) > 10
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (function_call
+          name: (identifier)
+          arguments: (star))))
+    (from_clause
+      (identifier))
+    (group_by_clause
+      (identifier))
+    (having_clause
+      (binary_expression
+        left: (function_call
+          name: (identifier)
+          arguments: (star))
+        right: (number_literal)))))
+
+================================================================================
+ORDER BY ascending (default)
+================================================================================
+
+SELECT name FROM users ORDER BY age
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (order_by_clause
+      (order_item
+        (identifier)))))
+
+================================================================================
+ORDER BY descending
+================================================================================
+
+SELECT name FROM users ORDER BY age DESC
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (order_by_clause
+      (order_item
+        (identifier)))))
+
+================================================================================
+ORDER BY ascending explicit
+================================================================================
+
+SELECT name FROM users ORDER BY age ASC
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (order_by_clause
+      (order_item
+        (identifier)))))
+
+================================================================================
+ORDER BY multiple columns
+================================================================================
+
+SELECT name FROM users ORDER BY city ASC, age DESC
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (order_by_clause
+      (order_item
+        (identifier))
+      (order_item
+        (identifier)))))
+
+================================================================================
+LIMIT clause
+================================================================================
+
+SELECT * FROM users LIMIT 10
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (limit_clause
+      (number_literal))))
+
+================================================================================
+Complete query with all clauses
+================================================================================
+
+SELECT category, COUNT(*) AS count
+FROM products
+WHERE active = TRUE
+GROUP BY category
+HAVING COUNT(*) > 5
+ORDER BY count DESC
+LIMIT 10
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (function_call
+            name: (identifier)
+            arguments: (star))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        left: (identifier)
+        right: (boolean_literal)))
+    (group_by_clause
+      (identifier))
+    (having_clause
+      (binary_expression
+        left: (function_call
+          name: (identifier)
+          arguments: (star))
+        right: (number_literal)))
+    (order_by_clause
+      (order_item
+        (identifier)))
+    (limit_clause
+      (number_literal))))

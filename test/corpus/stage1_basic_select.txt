@@ -1,0 +1,83 @@
+================================================================================
+SELECT a single number
+================================================================================
+
+SELECT 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (number_literal)))))
+
+================================================================================
+SELECT multiple numbers
+================================================================================
+
+SELECT 1, 2, 3
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (number_literal))
+      (select_item
+        (number_literal))
+      (select_item
+        (number_literal)))))
+
+================================================================================
+SELECT a single column from a table
+================================================================================
+
+SELECT id FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))))
+
+================================================================================
+SELECT multiple columns from a table
+================================================================================
+
+SELECT id, name, email FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))))
+
+================================================================================
+SELECT star (all columns) from a table
+================================================================================
+
+SELECT * FROM users
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))))
