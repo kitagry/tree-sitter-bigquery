@@ -319,6 +319,14 @@
           },
           {
             "type": "SYMBOL",
+            "name": "parameter_marker"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "system_variable"
+          },
+          {
+            "type": "SYMBOL",
             "name": "star"
           },
           {
@@ -478,6 +486,14 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "parameter_marker"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "system_variable"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "backtick_identifier"
               },
               {
@@ -571,6 +587,14 @@
                   {
                     "type": "SYMBOL",
                     "name": "interval_literal"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "parameter_marker"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "system_variable"
                   },
                   {
                     "type": "SYMBOL",
@@ -4396,6 +4420,14 @@
     "identifier": {
       "type": "PATTERN",
       "value": "[a-zA-Z_][a-zA-Z0-9_]*"
+    },
+    "parameter_marker": {
+      "type": "PATTERN",
+      "value": "@[a-zA-Z_][a-zA-Z0-9_]*"
+    },
+    "system_variable": {
+      "type": "PATTERN",
+      "value": "@@[a-zA-Z_][a-zA-Z0-9_]*"
     }
   },
   "extras": [

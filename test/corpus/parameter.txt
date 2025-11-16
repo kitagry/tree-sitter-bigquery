@@ -1,0 +1,147 @@
+================================================================================
+Simple parameter marker
+================================================================================
+
+SELECT * FROM users WHERE id = @user_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        (identifier)
+        (parameter_marker)))))
+
+================================================================================
+Multiple parameter markers
+================================================================================
+
+SELECT * FROM users WHERE age > @min_age AND age < @max_age
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (parameter_marker))
+        (binary_expression
+          (identifier)
+          (parameter_marker))))))
+
+================================================================================
+Parameter marker in INSERT
+================================================================================
+
+INSERT INTO users (name, age) VALUES (@name, @age)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (insert_statement
+    (identifier)
+    (column_list
+      (identifier)
+      (identifier))
+    (values_clause
+      (value_list
+        (parameter_marker)
+        (parameter_marker)))))
+
+================================================================================
+Parameter marker in function call
+================================================================================
+
+SELECT CONCAT('Hello, ', @name)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (function_call
+          (identifier)
+          (string_literal)
+          (parameter_marker))))))
+
+================================================================================
+System variable
+================================================================================
+
+SELECT @@dataset_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (system_variable)))))
+
+================================================================================
+Multiple system variables
+================================================================================
+
+SELECT @@project_id, @@dataset_id, @@session_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (system_variable))
+      (select_item
+        (system_variable))
+      (select_item
+        (system_variable)))))
+
+================================================================================
+System variable in WHERE clause
+================================================================================
+
+SELECT * FROM `project.dataset.table` WHERE project_id = @@project_id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (backtick_identifier))
+    (where_clause
+      (binary_expression
+        (identifier)
+        (system_variable)))))
+
+================================================================================
+Parameter marker with underscore and numbers
+================================================================================
+
+SELECT @param_1, @user_name_2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (parameter_marker))
+      (select_item
+        (parameter_marker)))))

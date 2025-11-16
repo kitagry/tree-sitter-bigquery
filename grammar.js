@@ -73,6 +73,8 @@ module.exports = grammar({
       $.array_literal,
       $.struct_literal,
       $.interval_literal,
+      $.parameter_marker,
+      $.system_variable,
       $.star,
       $.number_literal,
       $.backtick_identifier,
@@ -119,6 +121,8 @@ module.exports = grammar({
       $.array_literal,
       $.struct_literal,
       $.interval_literal,
+      $.parameter_marker,
+      $.system_variable,
       $.backtick_identifier,
       $.identifier,
       $.number_literal,
@@ -870,6 +874,12 @@ module.exports = grammar({
     ),
 
     identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    // Parameter marker (@param_name)
+    parameter_marker: $ => /@[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    // System variable (@@variable_name)
+    system_variable: $ => /@@[a-zA-Z_][a-zA-Z0-9_]*/,
   }
 });
 
