@@ -3164,6 +3164,10 @@
         {
           "type": "identifier",
           "named": true
+        },
+        {
+          "type": "table_name_with_wildcard",
+          "named": true
         }
       ]
     }
@@ -3725,6 +3729,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "table_name_with_wildcard",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
     }
   },
   {

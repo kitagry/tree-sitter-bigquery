@@ -1,0 +1,133 @@
+================================================================================
+Simple table wildcard with asterisk
+================================================================================
+
+SELECT * FROM dataset.table_*
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (qualified_table_name
+        (identifier)
+        (table_name_with_wildcard
+          (identifier))))))
+
+================================================================================
+Table wildcard with project qualifier
+================================================================================
+
+SELECT * FROM `project-id.dataset.table_*`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (backtick_identifier))))
+
+================================================================================
+Table wildcard with WHERE clause
+================================================================================
+
+SELECT id, name FROM dataset.events_*
+WHERE _TABLE_SUFFIX BETWEEN '20240101' AND '20241231'
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (qualified_table_name
+        (identifier)
+        (table_name_with_wildcard
+          (identifier))))
+    (where_clause
+      (between_expression
+        (identifier)
+        (string_literal)
+        (string_literal)))))
+
+================================================================================
+Table wildcard with alias
+================================================================================
+
+SELECT t.id FROM dataset.table_* AS t
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (field_access
+          (identifier)
+          (identifier))))
+    (from_clause
+      (table_alias
+        (qualified_table_name
+          (identifier)
+          (table_name_with_wildcard
+            (identifier)))
+        (identifier)))))
+
+================================================================================
+Multiple wildcards in different datasets
+================================================================================
+
+SELECT *
+FROM dataset1.events_*
+UNION ALL
+SELECT *
+FROM dataset2.logs_*
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set_operation
+    (select_statement
+      (select_clause
+        (select_item
+          (star)))
+      (from_clause
+        (qualified_table_name
+          (identifier)
+          (table_name_with_wildcard
+            (identifier)))))
+    (select_statement
+      (select_clause
+        (select_item
+          (star)))
+      (from_clause
+        (qualified_table_name
+          (identifier)
+          (table_name_with_wildcard
+            (identifier)))))))
+
+================================================================================
+Table wildcard with backtick and hyphen
+================================================================================
+
+SELECT * FROM `my-project.my-dataset.table_*`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (backtick_identifier))))

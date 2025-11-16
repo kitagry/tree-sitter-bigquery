@@ -378,18 +378,32 @@ module.exports = grammar({
     ),
 
     qualified_table_name: $ => choice(
+      // project.dataset.table or project.dataset.table_*
       seq(
         choice($.identifier, $.backtick_identifier),
         '.',
         $.identifier,
         '.',
-        $.identifier
+        choice(
+          $.identifier,
+          $.table_name_with_wildcard
+        )
       ),
+      // dataset.table or dataset.table_*
       seq(
         choice($.identifier, $.backtick_identifier),
         '.',
-        $.identifier
+        choice(
+          $.identifier,
+          $.table_name_with_wildcard
+        )
       )
+    ),
+
+    // Table name with wildcard suffix
+    table_name_with_wildcard: $ => seq(
+      $.identifier,
+      token.immediate('*')
     ),
 
     backtick_identifier: $ => /`[^`]+`/,
