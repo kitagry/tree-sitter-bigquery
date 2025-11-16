@@ -27,7 +27,9 @@ module.exports = grammar({
       $.insert_statement,
       $.update_statement,
       $.delete_statement,
-      $.merge_statement
+      $.merge_statement,
+      $.declare_statement,
+      $.set_statement
     )),
 
     select_statement: $ => seq(
@@ -615,6 +617,18 @@ module.exports = grammar({
     ),
 
     delete_action: $ => kw('DELETE'),
+
+    // DECLARE statement
+    declare_statement: $ => seq(
+      kw('DECLARE'),
+      field('variable', $.identifier),
+      field('type', $.type),
+      optional(seq(
+        kw('DEFAULT'),
+        field('default_value', $._expression)
+      )),
+      ';'
+    ),
 
     column_list: $ => seq(
       '(',
