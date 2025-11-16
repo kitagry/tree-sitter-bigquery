@@ -1,0 +1,111 @@
+================================================================================
+INTERVAL with number and single date part
+================================================================================
+
+SELECT INTERVAL 1 DAY
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (interval_literal
+          (number_literal)
+          (date_part))))))
+
+================================================================================
+INTERVAL with different date parts
+================================================================================
+
+SELECT INTERVAL 2 MONTH
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (interval_literal
+          (number_literal)
+          (date_part))))))
+
+================================================================================
+INTERVAL in arithmetic expression
+================================================================================
+
+SELECT date_col + INTERVAL 1 DAY
+FROM table1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (binary_expression
+          (identifier)
+          (interval_literal
+            (number_literal)
+            (date_part)))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+INTERVAL with string and TO range
+================================================================================
+
+SELECT INTERVAL '1-2' YEAR TO MONTH
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (interval_literal
+          (string_literal)
+          (date_part)
+          (date_part))))))
+
+================================================================================
+INTERVAL with DAY TO SECOND
+================================================================================
+
+SELECT INTERVAL '1 2:3:4' DAY TO SECOND
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (interval_literal
+          (string_literal)
+          (date_part)
+          (date_part))))))
+
+================================================================================
+Multiple INTERVAL operations
+================================================================================
+
+SELECT date_col + INTERVAL 1 DAY - INTERVAL 2 HOUR
+FROM table1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (binary_expression
+          (binary_expression
+            (identifier)
+            (interval_literal
+              (number_literal)
+              (date_part)))
+          (interval_literal
+            (number_literal)
+            (date_part)))))
+    (from_clause
+      (identifier))))

@@ -1,0 +1,86 @@
+================================================================================
+Simple UNPIVOT
+================================================================================
+
+SELECT * FROM
+  sales
+  UNPIVOT(sales FOR quarter IN (Q1, Q2, Q3, Q4))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (unpivot_expression
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)))))
+
+================================================================================
+UNPIVOT with subquery
+================================================================================
+
+SELECT * FROM
+  (SELECT product, Q1, Q2, Q3 FROM quarterly_sales)
+  UNPIVOT(revenue FOR quarter IN (Q1, Q2, Q3))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (unpivot_expression
+        (subquery
+          (select_statement
+            (select_clause
+              (select_item
+                (identifier))
+              (select_item
+                (identifier))
+              (select_item
+                (identifier))
+              (select_item
+                (identifier)))
+            (from_clause
+              (identifier))))
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)))))
+
+================================================================================
+UNPIVOT with qualified table name
+================================================================================
+
+SELECT * FROM
+  dataset.sales_data
+  UNPIVOT(amount FOR month IN (Jan, Feb, Mar))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (unpivot_expression
+        (qualified_table_name
+          (identifier)
+          (identifier))
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)))))

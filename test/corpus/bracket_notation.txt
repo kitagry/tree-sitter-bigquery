@@ -1,0 +1,121 @@
+================================================================================
+Array element access with index
+================================================================================
+
+SELECT arr[0]
+FROM table1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (array_access
+          (identifier)
+          (number_literal))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Array element access with OFFSET
+================================================================================
+
+SELECT arr[OFFSET(1)]
+FROM table1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (array_access
+          (identifier)
+          (offset_subscript
+            (number_literal)))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Array element access with ORDINAL
+================================================================================
+
+SELECT arr[ORDINAL(1)]
+FROM table1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (array_access
+          (identifier)
+          (ordinal_subscript
+            (number_literal)))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Nested array access
+================================================================================
+
+SELECT matrix[0][1]
+FROM table1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (array_access
+          (array_access
+            (identifier)
+            (number_literal))
+          (number_literal))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Array access with field access
+================================================================================
+
+SELECT arr[0].field
+FROM table1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (field_access
+          (array_access
+            (identifier)
+            (number_literal))
+          (identifier))))
+    (from_clause
+      (identifier))))
+
+================================================================================
+Field access then array access
+================================================================================
+
+SELECT struct_col.arr[0]
+FROM table1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (array_access
+          (field_access
+            (identifier)
+            (identifier))
+          (number_literal))))
+    (from_clause
+      (identifier))))

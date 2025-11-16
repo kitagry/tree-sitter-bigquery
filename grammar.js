@@ -17,16 +17,23 @@ module.exports = grammar({
 
   rules: {
     // Stage 1: Basic SELECT statement
-    source_file: $ => repeat(choice(
-      $.set_operation,
-      $.select_statement,
-      $.create_table_statement,
-      $.create_view_statement,
-      $.drop_table_statement,
-      $.drop_view_statement,
-      $.insert_statement,
-      $.update_statement,
-      $.delete_statement
+    source_file: $ => repeat(seq(
+      choice(
+        $.set_operation,
+        $.select_statement,
+        $.create_table_statement,
+        $.create_view_statement,
+        $.create_function_statement,
+        $.drop_table_statement,
+        $.drop_view_statement,
+        $.insert_statement,
+        $.update_statement,
+        $.delete_statement,
+        $.merge_statement,
+        $.declare_statement,
+        $.set_statement
+      ),
+      optional(';')
     )),
 
     select_statement: $ => seq(
@@ -36,19 +43,20 @@ module.exports = grammar({
       optional($.where_clause),
       optional($.group_by_clause),
       optional($.having_clause),
+      optional($.qualify_clause),
       optional($.order_by_clause),
       optional($.limit_clause),
+      optional($.offset_clause)
     ),
 
     select_clause: $ => seq(
       kw('SELECT'),
       optional(choice(kw('DISTINCT'), kw('ALL'))),
-      // 項目リストの定義を簡素化し、優先度で曖昧さを解消する
       prec.right(
         seq(
           $.select_item,
           repeat(seq(',', $.select_item)),
-          optional(',') // 末尾のコンマを許可
+          optional(',') // Allow trailing comma
         )
       )
     ),
@@ -59,10 +67,12 @@ module.exports = grammar({
       $.cast_expression,
       $.binary_expression,
       $.function_call,
+      $.array_access,
       $.field_access,
       $.subquery,
       $.array_literal,
       $.struct_literal,
+      $.interval_literal,
       $.star,
       $.number_literal,
       $.backtick_identifier,
@@ -79,6 +89,8 @@ module.exports = grammar({
       $.table_alias,
       $.subquery,
       $.unnest_expression,
+      $.pivot_expression,
+      $.unpivot_expression,
       $.qualified_table_name,
       $.backtick_identifier,
       $.identifier
@@ -101,10 +113,12 @@ module.exports = grammar({
       $.cast_expression,
       $.window_function,
       $.function_call,
+      $.array_access,
       $.field_access,
       $.subquery,
       $.array_literal,
       $.struct_literal,
+      $.interval_literal,
       $.backtick_identifier,
       $.identifier,
       $.number_literal,
@@ -187,6 +201,11 @@ module.exports = grammar({
       $._expression
     ),
 
+    qualify_clause: $ => seq(
+      kw('QUALIFY'),
+      $._expression
+    ),
+
     order_by_clause: $ => seq(
       kw('ORDER'),
       kw('BY'),
@@ -200,6 +219,11 @@ module.exports = grammar({
 
     limit_clause: $ => seq(
       kw('LIMIT'),
+      $.number_literal
+    ),
+
+    offset_clause: $ => seq(
+      kw('OFFSET'),
       $.number_literal
     ),
 
@@ -258,7 +282,8 @@ module.exports = grammar({
       field('object', choice(
         $.identifier,
         $.backtick_identifier,
-        $.field_access
+        $.field_access,
+        $.array_access
       )),
       '.',
       field('field', choice(
@@ -266,6 +291,37 @@ module.exports = grammar({
         $.backtick_identifier
       ))
     )),
+
+    // Array element access with brackets
+    array_access: $ => prec.left(8, seq(
+      field('array', choice(
+        $.identifier,
+        $.backtick_identifier,
+        $.field_access,
+        $.array_access
+      )),
+      '[',
+      field('index', choice(
+        $._expression,
+        $.offset_subscript,
+        $.ordinal_subscript
+      )),
+      ']'
+    )),
+
+    offset_subscript: $ => seq(
+      kw('OFFSET'),
+      '(',
+      $._expression,
+      ')'
+    ),
+
+    ordinal_subscript: $ => seq(
+      kw('ORDINAL'),
+      '(',
+      $._expression,
+      ')'
+    ),
 
     // Stage 5: Subqueries and CTEs
     subquery: $ => seq(
@@ -328,19 +384,97 @@ module.exports = grammar({
       ')'
     ),
 
+    // PIVOT expression
+    pivot_expression: $ => seq(
+      field('input', choice(
+        $.subquery,
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      $.pivot_clause
+    ),
+
+    pivot_clause: $ => seq(
+      kw('PIVOT'),
+      '(',
+      field('aggregates', choice(
+        // Single aggregate: SUM(sales)
+        $.function_call,
+        // Multiple aggregates with aliases: SUM(sales) AS total, COUNT(*) AS cnt
+        commaSep1($.pivot_aggregate)
+      )),
+      kw('FOR'),
+      field('pivot_column', $.identifier),
+      kw('IN'),
+      '(',
+      commaSep1(choice(
+        $.pivot_value,
+        $._expression
+      )),
+      ')',
+      ')'
+    ),
+
+    pivot_aggregate: $ => seq(
+      $.function_call,
+      kw('AS'),
+      field('alias', $.identifier)
+    ),
+
+    pivot_value: $ => seq(
+      $._expression,
+      kw('AS'),
+      field('alias', $.identifier)
+    ),
+
+    // UNPIVOT expression (placeholder for now)
+    unpivot_expression: $ => seq(
+      field('input', choice(
+        $.subquery,
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      kw('UNPIVOT'),
+      '(',
+      $.identifier,
+      kw('FOR'),
+      $.identifier,
+      kw('IN'),
+      '(',
+      commaSep1($.identifier),
+      ')',
+      ')'
+    ),
+
     qualified_table_name: $ => choice(
+      // project.dataset.table or project.dataset.table_*
       seq(
         choice($.identifier, $.backtick_identifier),
         '.',
         $.identifier,
         '.',
-        $.identifier
+        choice(
+          $.identifier,
+          $.table_name_with_wildcard
+        )
       ),
+      // dataset.table or dataset.table_*
       seq(
         choice($.identifier, $.backtick_identifier),
         '.',
-        $.identifier
+        choice(
+          $.identifier,
+          $.table_name_with_wildcard
+        )
       )
+    ),
+
+    // Table name with wildcard suffix
+    table_name_with_wildcard: $ => seq(
+      $.identifier,
+      token.immediate('*')
     ),
 
     backtick_identifier: $ => /`[^`]+`/,
@@ -420,6 +554,39 @@ module.exports = grammar({
       )),
       kw('AS'),
       $.select_statement
+    ),
+
+    create_function_statement: $ => seq(
+      kw('CREATE'),
+      optional(choice(
+        seq(kw('OR'), kw('REPLACE')),
+        kw('TEMP'),
+        kw('TEMPORARY')
+      )),
+      kw('FUNCTION'),
+      field('name', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      field('parameters', $.parameter_list),
+      kw('RETURNS'),
+      field('return_type', $.type),
+      kw('AS'),
+      '(',
+      field('body', $._expression),
+      ')'
+    ),
+
+    parameter_list: $ => seq(
+      '(',
+      optional(commaSep1($.parameter)),
+      ')'
+    ),
+
+    parameter: $ => seq(
+      field('name', $.identifier),
+      field('type', $.type)
     ),
 
     drop_table_statement: $ => seq(
@@ -512,6 +679,86 @@ module.exports = grammar({
       optional($.where_clause)
     ),
 
+    // MERGE statement
+    merge_statement: $ => seq(
+      kw('MERGE'),
+      optional(kw('INTO')),
+      field('target', choice($.qualified_table_name, $.backtick_identifier, $.identifier)),
+      optional(field('target_alias', $.identifier)),
+      kw('USING'),
+      field('source', choice($.qualified_table_name, $.backtick_identifier, $.identifier, $.subquery)),
+      optional(field('source_alias', $.identifier)),
+      kw('ON'),
+      field('condition', $._expression),
+      repeat1(choice(
+        $.when_matched_clause,
+        $.when_not_matched_clause,
+        $.when_not_matched_by_source_clause
+      ))
+    ),
+
+    when_matched_clause: $ => seq(
+      kw('WHEN'),
+      kw('MATCHED'),
+      optional(seq(kw('AND'), $._expression)),
+      kw('THEN'),
+      choice(
+        seq(kw('UPDATE'), $.set_clause),
+        $.delete_action
+      )
+    ),
+
+    when_not_matched_clause: $ => seq(
+      kw('WHEN'),
+      kw('NOT'),
+      kw('MATCHED'),
+      optional(seq(kw('AND'), $._expression)),
+      kw('THEN'),
+      kw('INSERT'),
+      '(',
+      commaSep1($.identifier),
+      ')',
+      kw('VALUES'),
+      '(',
+      commaSep1($._expression),
+      ')'
+    ),
+
+    when_not_matched_by_source_clause: $ => seq(
+      kw('WHEN'),
+      kw('NOT'),
+      kw('MATCHED'),
+      kw('BY'),
+      kw('SOURCE'),
+      optional(seq(kw('AND'), $._expression)),
+      kw('THEN'),
+      choice(
+        seq(kw('UPDATE'), $.set_clause),
+        $.delete_action
+      )
+    ),
+
+    delete_action: $ => kw('DELETE'),
+
+    // DECLARE statement
+    declare_statement: $ => seq(
+      kw('DECLARE'),
+      field('variable', $.identifier),
+      field('type', $.type),
+      optional(seq(
+        kw('DEFAULT'),
+        field('default_value', $._expression)
+      ))
+    ),
+
+    // SET statement
+    set_statement: $ => seq(
+      kw('SET'),
+      field('variable', $.identifier),
+      '=',
+      field('value', $._expression)
+    ),
+
     column_list: $ => seq(
       '(',
       commaSep1($.identifier),
@@ -535,7 +782,7 @@ module.exports = grammar({
     ),
 
     assignment: $ => seq(
-      field('column', $.identifier),
+      field('column', choice($.field_access, $.identifier)),
       '=',
       field('value', $._expression)
     ),
@@ -587,6 +834,28 @@ module.exports = grammar({
 
     // Primitives
     star: $ => '*',
+
+    // INTERVAL literals
+    interval_literal: $ => seq(
+      kw('INTERVAL'),
+      choice($.number_literal, $.string_literal),
+      field('from', $.date_part),
+      optional(seq(
+        kw('TO'),
+        field('to', $.date_part)
+      ))
+    ),
+
+    date_part: $ => choice(
+      kw('YEAR'),
+      kw('MONTH'),
+      kw('DAY'),
+      kw('HOUR'),
+      kw('MINUTE'),
+      kw('SECOND'),
+      kw('MILLISECOND'),
+      kw('MICROSECOND')
+    ),
 
     number_literal: $ => /\d+/,
 

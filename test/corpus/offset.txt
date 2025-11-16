@@ -1,0 +1,72 @@
+================================================================================
+OFFSET clause
+================================================================================
+
+SELECT id, name
+FROM users
+OFFSET 10
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (offset_clause
+      (number_literal))))
+
+================================================================================
+LIMIT with OFFSET
+================================================================================
+
+SELECT id, name
+FROM users
+LIMIT 5
+OFFSET 10
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (limit_clause
+      (number_literal))
+    (offset_clause
+      (number_literal))))
+
+================================================================================
+OFFSET with ORDER BY
+================================================================================
+
+SELECT id, name
+FROM users
+ORDER BY id
+OFFSET 20
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (order_by_clause
+      (order_item
+        (identifier)))
+    (offset_clause
+      (number_literal))))

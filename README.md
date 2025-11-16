@@ -14,12 +14,19 @@ Tree-sitter is a parser generator tool and incremental parsing library. It build
 
 ## About This Project
 
-This project provides a Tree-sitter grammar for Google BigQuery's SQL dialect. BigQuery has many unique features compared to standard SQL, including:
+This project provides a comprehensive Tree-sitter grammar for Google BigQuery's SQL dialect. BigQuery has many unique features compared to standard SQL, and this parser supports:
 
-- Nested and repeated fields (STRUCT and ARRAY types)
-- Table name qualifiers (`project.dataset.table`)
-- BigQuery-specific functions and syntax
-- DDL statements specific to BigQuery
+- **Complete query structure**: SELECT, FROM, WHERE, GROUP BY, HAVING, QUALIFY, ORDER BY, LIMIT, OFFSET
+- **Advanced SELECT features**: DISTINCT/ALL, set operations (UNION, INTERSECT, EXCEPT)
+- **Nested and repeated fields**: STRUCT and ARRAY types with full bracket notation support
+- **BigQuery-specific syntax**: Table qualifiers (`project.dataset.table`), table wildcards (`table_*`), backtick identifiers
+- **Data transformation**: PIVOT/UNPIVOT for cross-tabulation and data reshaping
+- **Comprehensive JOIN support**: INNER, LEFT, RIGHT, FULL, CROSS JOINs
+- **Subqueries and CTEs**: Common Table Expressions with WITH clause
+- **Window functions**: OVER, PARTITION BY, QUALIFY, frame specifications
+- **DML statements**: INSERT, UPDATE, DELETE, and MERGE
+- **Script features**: DECLARE, SET, CREATE FUNCTION (UDF)
+- **Advanced features**: CASE expressions, CAST, INTERVAL literals, array element access
 
 ## Installation
 
@@ -50,70 +57,85 @@ const BigQuery = require('tree-sitter-bigquery');
 const parser = new Parser();
 parser.setLanguage(BigQuery);
 
-const sourceCode = 'SELECT id, name FROM `project.dataset.table` WHERE id > 100';
+const sourceCode = `
+  SELECT DISTINCT id, name
+  FROM \`project.dataset.table\`
+  WHERE id > 100
+  OFFSET 10
+`;
 const tree = parser.parse(sourceCode);
 
 console.log(tree.rootNode.toString());
 ```
 
-## Development Approach
+## Features
 
-This grammar is being developed incrementally in stages, from simple to complex:
+This parser provides comprehensive support for BigQuery SQL, including:
 
-### Stage 0: Preparation ✓
-- Documentation and project setup
+### Query Basics
+- **SELECT statements**: Column selection, DISTINCT/ALL modifiers, aliases
+- **FROM clause**: Tables, subqueries, table wildcards (`dataset.table_*`)
+- **WHERE clause**: Filtering with comparison and logical operators
+- **GROUP BY / HAVING**: Aggregation and group filtering
+- **QUALIFY**: Window function result filtering
+- **ORDER BY**: Sorting with ASC/DESC
+- **LIMIT / OFFSET**: Result pagination
 
-### Stage 1: Basic SELECT ✓
-- `SELECT 1`
-- `SELECT column FROM table`
-- Basic identifiers and numeric literals
+### Joins and Set Operations
+- **JOIN types**: INNER, LEFT, RIGHT, FULL, CROSS
+- **Set operations**: UNION, INTERSECT, EXCEPT (with ALL/DISTINCT)
+- **Subqueries**: In SELECT, FROM, WHERE clauses
+- **CTEs**: WITH clause (Common Table Expressions)
 
-### Stage 2: WHERE Clause and Expressions ✓
-- Comparison operators (=, !=, <, >, <=, >=)
-- Logical operators (AND, OR, NOT)
-- String and boolean literals
+### Data Types and Literals
+- **Basic types**: INT64, STRING, FLOAT64, BOOL, TIMESTAMP, etc.
+- **Complex types**: STRUCT, ARRAY
+- **Literals**: Numbers, strings, booleans, arrays, intervals
+- **INTERVAL expressions**: `INTERVAL 1 DAY`, `INTERVAL '1-2' YEAR TO MONTH`
 
-### Stage 3: Aggregation and GROUP BY ✓
-- Aggregate functions (COUNT, SUM, AVG, MIN, MAX)
-- GROUP BY and HAVING clauses
-- ORDER BY and LIMIT
+### BigQuery-Specific Features
+- **Nested fields**: Dot notation (`user.address.city`)
+- **Array access**: Bracket notation (`array[0]`, `array[OFFSET(1)]`, `array[ORDINAL(1)]`)
+- **Table qualifiers**: `project.dataset.table`
+- **Table wildcards**: `dataset.table_*` for querying multiple tables
+- **Backtick identifiers**: `` `project-id.dataset.table` ``
+- **UNNEST**: Flatten arrays
+- **PIVOT / UNPIVOT**: Data transformation and cross-tabulation
 
-### Stage 4: JOIN Operations ✓
-- INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN, CROSS JOIN
-- ON conditions
-- Table and column aliases
+### Window Functions
+- **OVER clause**: Window specifications
+- **PARTITION BY**: Partition data for window operations
+- **ORDER BY**: Ordering within windows
+- **Frame clauses**: ROWS/RANGE BETWEEN
+- **QUALIFY**: Filter on window function results
 
-### Stage 5: Subqueries and CTEs ✓
-- Subqueries in SELECT, FROM, and WHERE
-- WITH clause (Common Table Expressions)
+### DML Statements
+- **INSERT**: Single/multiple rows, INSERT...SELECT
+- **UPDATE**: With SET clause and WHERE conditions
+- **DELETE**: With WHERE conditions
+- **MERGE**: UPSERT operations with WHEN MATCHED/NOT MATCHED clauses
 
-### Stage 6: BigQuery-Specific Types ✓
-- STRUCT and ARRAY types
-- Nested field access (dot notation)
-- UNNEST
-- Qualified table names
-- Backtick identifiers
+### DDL Statements
+- **CREATE TABLE**: With column definitions or AS SELECT
+- **CREATE VIEW**: Standard and materialized views
+- **CREATE FUNCTION**: User-Defined Functions (UDF)
+- **DROP statements**: TABLE, VIEW with IF EXISTS support
+- **OR REPLACE**: For idempotent DDL operations
 
-### Stage 7: Window Functions ✓
-- OVER clause
-- PARTITION BY and ORDER BY in windows
-- Frame specifications
+### Scripting and Functions
+- **DECLARE**: Variable declaration with type and default values
+- **SET**: Variable assignment
+- **CREATE FUNCTION**: SQL-based UDFs with parameters and return types
+- **TEMP functions**: Temporary function definitions
 
-### Stage 8: DDL Statements ✓
-- CREATE TABLE / CREATE OR REPLACE TABLE
-- CREATE VIEW
-- ALTER TABLE
-- DROP statements
-
-### Stage 9: Other DML/DQL ✓
-- INSERT, UPDATE, DELETE, MERGE
-- DECLARE and SET
-
-### Stage 10: Advanced Features ✓
-- User-Defined Functions (UDFs)
-- CASE expressions
-- CAST and SAFE_CAST
-- Date and time functions
+### Expressions and Operators
+- **Arithmetic**: +, -, *, /, %
+- **Comparison**: =, !=, <, >, <=, >=
+- **Logical**: AND, OR, NOT
+- **Special operators**: BETWEEN, LIKE, IN, EXISTS, IS NULL
+- **CASE expressions**: Searched and simple forms
+- **CAST**: Type conversion with CAST and SAFE_CAST
+- **Functions**: Aggregate, window, and scalar functions
 
 ## Testing
 

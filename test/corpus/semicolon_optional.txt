@@ -1,0 +1,90 @@
+================================================================================
+SELECT without semicolon
+================================================================================
+
+SELECT 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (number_literal)))))
+
+================================================================================
+SELECT with semicolon
+================================================================================
+
+SELECT 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (number_literal)))))
+
+================================================================================
+Multiple statements with mixed semicolons
+================================================================================
+
+DECLARE x INT64;
+SET x = 5
+SELECT x;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (declare_statement
+    (identifier)
+    (type))
+  (set_statement
+    (identifier)
+    (number_literal))
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier)))))
+
+================================================================================
+INSERT without semicolon
+================================================================================
+
+INSERT INTO users (id, name) VALUES (1, 'John')
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (insert_statement
+    (identifier)
+    (column_list
+      (identifier)
+      (identifier))
+    (values_clause
+      (value_list
+        (number_literal)
+        (string_literal)))))
+
+================================================================================
+CREATE FUNCTION without semicolon
+================================================================================
+
+CREATE FUNCTION add_one(x INT64)
+RETURNS INT64
+AS (x + 1)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (type)))
+    (type)
+    (binary_expression
+      (identifier)
+      (number_literal))))
