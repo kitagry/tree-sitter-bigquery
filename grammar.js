@@ -52,12 +52,11 @@ module.exports = grammar({
     select_clause: $ => seq(
       kw('SELECT'),
       optional(choice(kw('DISTINCT'), kw('ALL'))),
-      // 項目リストの定義を簡素化し、優先度で曖昧さを解消する
       prec.right(
         seq(
           $.select_item,
           repeat(seq(',', $.select_item)),
-          optional(',') // 末尾のコンマを許可
+          optional(',') // Allow trailing comma
         )
       )
     ),
