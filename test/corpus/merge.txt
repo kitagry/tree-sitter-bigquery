@@ -1,0 +1,104 @@
+================================================================================
+Simple MERGE with MATCHED and NOT MATCHED
+================================================================================
+
+MERGE INTO target_table T
+USING source_table S
+ON T.id = S.id
+WHEN MATCHED THEN
+  UPDATE SET T.value = S.value
+WHEN NOT MATCHED THEN
+  INSERT (id, value) VALUES (S.id, S.value)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (merge_statement
+    (identifier)
+    (identifier)
+    (identifier)
+    (identifier)
+    (binary_expression
+      (field_access
+        (identifier)
+        (identifier))
+      (field_access
+        (identifier)
+        (identifier)))
+    (when_matched_clause
+      (set_clause
+        (assignment
+          (field_access
+            (identifier)
+            (identifier))
+          (field_access
+            (identifier)
+            (identifier)))))
+    (when_not_matched_clause
+      (identifier)
+      (identifier)
+      (field_access
+        (identifier)
+        (identifier))
+      (field_access
+        (identifier)
+        (identifier)))))
+
+================================================================================
+MERGE with DELETE
+================================================================================
+
+MERGE INTO target_table T
+USING source_table S
+ON T.id = S.id
+WHEN MATCHED AND T.is_deleted THEN
+  DELETE
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (merge_statement
+    (identifier)
+    (identifier)
+    (identifier)
+    (identifier)
+    (binary_expression
+      (field_access
+        (identifier)
+        (identifier))
+      (field_access
+        (identifier)
+        (identifier)))
+    (when_matched_clause
+      (field_access
+        (identifier)
+        (identifier))
+      (delete_action))))
+
+================================================================================
+MERGE with NOT MATCHED BY SOURCE
+================================================================================
+
+MERGE INTO target_table T
+USING source_table S
+ON T.id = S.id
+WHEN NOT MATCHED BY SOURCE THEN
+  DELETE
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (merge_statement
+    (identifier)
+    (identifier)
+    (identifier)
+    (identifier)
+    (binary_expression
+      (field_access
+        (identifier)
+        (identifier))
+      (field_access
+        (identifier)
+        (identifier)))
+    (when_not_matched_by_source_clause
+      (delete_action))))

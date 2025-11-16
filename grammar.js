@@ -26,7 +26,8 @@ module.exports = grammar({
       $.drop_view_statement,
       $.insert_statement,
       $.update_statement,
-      $.delete_statement
+      $.delete_statement,
+      $.merge_statement
     )),
 
     select_statement: $ => seq(
@@ -554,6 +555,67 @@ module.exports = grammar({
       optional($.where_clause)
     ),
 
+    // MERGE statement
+    merge_statement: $ => seq(
+      kw('MERGE'),
+      optional(kw('INTO')),
+      field('target', choice($.qualified_table_name, $.backtick_identifier, $.identifier)),
+      optional(field('target_alias', $.identifier)),
+      kw('USING'),
+      field('source', choice($.qualified_table_name, $.backtick_identifier, $.identifier, $.subquery)),
+      optional(field('source_alias', $.identifier)),
+      kw('ON'),
+      field('condition', $._expression),
+      repeat1(choice(
+        $.when_matched_clause,
+        $.when_not_matched_clause,
+        $.when_not_matched_by_source_clause
+      ))
+    ),
+
+    when_matched_clause: $ => seq(
+      kw('WHEN'),
+      kw('MATCHED'),
+      optional(seq(kw('AND'), $._expression)),
+      kw('THEN'),
+      choice(
+        seq(kw('UPDATE'), $.set_clause),
+        $.delete_action
+      )
+    ),
+
+    when_not_matched_clause: $ => seq(
+      kw('WHEN'),
+      kw('NOT'),
+      kw('MATCHED'),
+      optional(seq(kw('AND'), $._expression)),
+      kw('THEN'),
+      kw('INSERT'),
+      '(',
+      commaSep1($.identifier),
+      ')',
+      kw('VALUES'),
+      '(',
+      commaSep1($._expression),
+      ')'
+    ),
+
+    when_not_matched_by_source_clause: $ => seq(
+      kw('WHEN'),
+      kw('NOT'),
+      kw('MATCHED'),
+      kw('BY'),
+      kw('SOURCE'),
+      optional(seq(kw('AND'), $._expression)),
+      kw('THEN'),
+      choice(
+        seq(kw('UPDATE'), $.set_clause),
+        $.delete_action
+      )
+    ),
+
+    delete_action: $ => kw('DELETE'),
+
     column_list: $ => seq(
       '(',
       commaSep1($.identifier),
@@ -577,7 +639,7 @@ module.exports = grammar({
     ),
 
     assignment: $ => seq(
-      field('column', $.identifier),
+      field('column', choice($.field_access, $.identifier)),
       '=',
       field('value', $._expression)
     ),
