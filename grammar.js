@@ -43,6 +43,7 @@ module.exports = grammar({
       optional($.where_clause),
       optional($.group_by_clause),
       optional($.having_clause),
+      optional($.qualify_clause),
       optional($.order_by_clause),
       optional($.limit_clause),
       optional($.offset_clause)
@@ -196,6 +197,11 @@ module.exports = grammar({
 
     having_clause: $ => seq(
       kw('HAVING'),
+      $._expression
+    ),
+
+    qualify_clause: $ => seq(
+      kw('QUALIFY'),
       $._expression
     ),
 

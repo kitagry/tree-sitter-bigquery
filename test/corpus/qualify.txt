@@ -1,0 +1,212 @@
+================================================================================
+Simple QUALIFY with ROW_NUMBER
+================================================================================
+
+SELECT name, salary
+FROM employees
+QUALIFY ROW_NUMBER() OVER (ORDER BY salary DESC) = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (qualify_clause
+      (binary_expression
+        (window_function
+          (identifier)
+          (over_clause
+            (order_by_clause
+              (order_item
+                (identifier)))))
+        (number_literal)))))
+
+================================================================================
+QUALIFY with RANK and complex condition
+================================================================================
+
+SELECT product_id, revenue
+FROM sales
+QUALIFY RANK() OVER (PARTITION BY category ORDER BY revenue DESC) <= 3
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (qualify_clause
+      (binary_expression
+        (window_function
+          (identifier)
+          (over_clause
+            (partition_by_clause
+              (identifier))
+            (order_by_clause
+              (order_item
+                (identifier)))))
+        (number_literal)))))
+
+================================================================================
+QUALIFY with WHERE clause
+================================================================================
+
+SELECT name, department, salary
+FROM employees
+WHERE active = TRUE
+QUALIFY ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (where_clause
+      (binary_expression
+        (identifier)
+        (boolean_literal)))
+    (qualify_clause
+      (binary_expression
+        (window_function
+          (identifier)
+          (over_clause
+            (partition_by_clause
+              (identifier))
+            (order_by_clause
+              (order_item
+                (identifier)))))
+        (number_literal)))))
+
+================================================================================
+QUALIFY with GROUP BY and HAVING
+================================================================================
+
+SELECT department, COUNT(*) as emp_count
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 5
+QUALIFY ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) <= 3
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (function_call
+            (identifier)
+            (star))
+          (identifier))))
+    (from_clause
+      (identifier))
+    (group_by_clause
+      (identifier))
+    (having_clause
+      (binary_expression
+        (function_call
+          (identifier)
+          (star))
+        (number_literal)))
+    (qualify_clause
+      (binary_expression
+        (window_function
+          (identifier)
+          (over_clause
+            (order_by_clause
+              (order_item
+                (function_call
+                  (identifier)
+                  (star))))))
+        (number_literal)))))
+
+================================================================================
+QUALIFY with AND condition
+================================================================================
+
+SELECT name, sales
+FROM salespeople
+QUALIFY ROW_NUMBER() OVER (ORDER BY sales DESC) = 1
+  AND sales > 10000
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (qualify_clause
+      (binary_expression
+        (binary_expression
+          (window_function
+            (identifier)
+            (over_clause
+              (order_by_clause
+                (order_item
+                  (identifier)))))
+          (number_literal))
+        (binary_expression
+          (identifier)
+          (number_literal))))))
+
+================================================================================
+QUALIFY with ORDER BY and LIMIT
+================================================================================
+
+SELECT name, score
+FROM players
+QUALIFY ROW_NUMBER() OVER (ORDER BY score DESC) <= 10
+ORDER BY score DESC
+LIMIT 5
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier)))
+    (from_clause
+      (identifier))
+    (qualify_clause
+      (binary_expression
+        (window_function
+          (identifier)
+          (over_clause
+            (order_by_clause
+              (order_item
+                (identifier)))))
+        (number_literal)))
+    (order_by_clause
+      (order_item
+        (identifier)))
+    (limit_clause
+      (number_literal))))
