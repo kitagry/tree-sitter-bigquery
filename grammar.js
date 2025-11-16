@@ -60,6 +60,7 @@ module.exports = grammar({
       $.cast_expression,
       $.binary_expression,
       $.function_call,
+      $.array_access,
       $.field_access,
       $.subquery,
       $.array_literal,
@@ -102,6 +103,7 @@ module.exports = grammar({
       $.cast_expression,
       $.window_function,
       $.function_call,
+      $.array_access,
       $.field_access,
       $.subquery,
       $.array_literal,
@@ -264,7 +266,8 @@ module.exports = grammar({
       field('object', choice(
         $.identifier,
         $.backtick_identifier,
-        $.field_access
+        $.field_access,
+        $.array_access
       )),
       '.',
       field('field', choice(
@@ -272,6 +275,37 @@ module.exports = grammar({
         $.backtick_identifier
       ))
     )),
+
+    // Array element access with brackets
+    array_access: $ => prec.left(8, seq(
+      field('array', choice(
+        $.identifier,
+        $.backtick_identifier,
+        $.field_access,
+        $.array_access
+      )),
+      '[',
+      field('index', choice(
+        $._expression,
+        $.offset_subscript,
+        $.ordinal_subscript
+      )),
+      ']'
+    )),
+
+    offset_subscript: $ => seq(
+      kw('OFFSET'),
+      '(',
+      $._expression,
+      ')'
+    ),
+
+    ordinal_subscript: $ => seq(
+      kw('ORDINAL'),
+      '(',
+      $._expression,
+      ')'
+    ),
 
     // Stage 5: Subqueries and CTEs
     subquery: $ => seq(
