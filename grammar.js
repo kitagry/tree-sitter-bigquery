@@ -22,6 +22,7 @@ module.exports = grammar({
       $.select_statement,
       $.create_table_statement,
       $.create_view_statement,
+      $.create_function_statement,
       $.drop_table_statement,
       $.drop_view_statement,
       $.insert_statement,
@@ -465,6 +466,40 @@ module.exports = grammar({
       )),
       kw('AS'),
       $.select_statement
+    ),
+
+    create_function_statement: $ => seq(
+      kw('CREATE'),
+      optional(choice(
+        seq(kw('OR'), kw('REPLACE')),
+        kw('TEMP'),
+        kw('TEMPORARY')
+      )),
+      kw('FUNCTION'),
+      field('name', choice(
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      field('parameters', $.parameter_list),
+      kw('RETURNS'),
+      field('return_type', $.type),
+      kw('AS'),
+      '(',
+      field('body', $._expression),
+      ')',
+      ';'
+    ),
+
+    parameter_list: $ => seq(
+      '(',
+      optional(commaSep1($.parameter)),
+      ')'
+    ),
+
+    parameter: $ => seq(
+      field('name', $.identifier),
+      field('type', $.type)
     ),
 
     drop_table_statement: $ => seq(

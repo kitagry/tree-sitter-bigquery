@@ -1,0 +1,120 @@
+================================================================================
+Simple CREATE FUNCTION with SQL body
+================================================================================
+
+CREATE FUNCTION add_one(x INT64)
+RETURNS INT64
+AS (x + 1);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (type)))
+    (type)
+    (binary_expression
+      (identifier)
+      (number_literal))))
+
+================================================================================
+CREATE FUNCTION with multiple parameters
+================================================================================
+
+CREATE FUNCTION add_numbers(x INT64, y INT64)
+RETURNS INT64
+AS (x + y);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (type))
+      (parameter
+        (identifier)
+        (type)))
+    (type)
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+================================================================================
+CREATE OR REPLACE FUNCTION
+================================================================================
+
+CREATE OR REPLACE FUNCTION multiply(a FLOAT64, b FLOAT64)
+RETURNS FLOAT64
+AS (a * b);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (type))
+      (parameter
+        (identifier)
+        (type)))
+    (type)
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+================================================================================
+CREATE TEMP FUNCTION
+================================================================================
+
+CREATE TEMP FUNCTION square(x INT64)
+RETURNS INT64
+AS (x * x);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (type)))
+    (type)
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+================================================================================
+CREATE FUNCTION with complex expression
+================================================================================
+
+CREATE FUNCTION calculate_discount(price FLOAT64, discount_rate FLOAT64)
+RETURNS FLOAT64
+AS (price * (1 - discount_rate));
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (type))
+      (parameter
+        (identifier)
+        (type)))
+    (type)
+    (binary_expression
+      (identifier)
+      (binary_expression
+        (number_literal)
+        (identifier)))))
