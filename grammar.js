@@ -65,6 +65,7 @@ module.exports = grammar({
       $.subquery,
       $.array_literal,
       $.struct_literal,
+      $.interval_literal,
       $.star,
       $.number_literal,
       $.backtick_identifier,
@@ -108,6 +109,7 @@ module.exports = grammar({
       $.subquery,
       $.array_literal,
       $.struct_literal,
+      $.interval_literal,
       $.backtick_identifier,
       $.identifier,
       $.number_literal,
@@ -627,6 +629,28 @@ module.exports = grammar({
 
     // Primitives
     star: $ => '*',
+
+    // INTERVAL literals
+    interval_literal: $ => seq(
+      kw('INTERVAL'),
+      choice($.number_literal, $.string_literal),
+      field('from', $.date_part),
+      optional(seq(
+        kw('TO'),
+        field('to', $.date_part)
+      ))
+    ),
+
+    date_part: $ => choice(
+      kw('YEAR'),
+      kw('MONTH'),
+      kw('DAY'),
+      kw('HOUR'),
+      kw('MINUTE'),
+      kw('SECOND'),
+      kw('MILLISECOND'),
+      kw('MICROSECOND')
+    ),
 
     number_literal: $ => /\d+/,
 

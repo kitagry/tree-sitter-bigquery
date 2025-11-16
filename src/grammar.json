@@ -270,6 +270,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "interval_literal"
+          },
+          {
+            "type": "SYMBOL",
             "name": "star"
           },
           {
@@ -417,6 +421,10 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "interval_literal"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "backtick_identifier"
               },
               {
@@ -506,6 +514,10 @@
                   {
                     "type": "SYMBOL",
                     "name": "struct_literal"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "interval_literal"
                   },
                   {
                     "type": "SYMBOL",
@@ -3193,6 +3205,98 @@
     "star": {
       "type": "STRING",
       "value": "*"
+    },
+    "interval_literal": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "[iI][nN][tT][eE][rR][vV][aA][lL]"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "string_literal"
+            }
+          ]
+        },
+        {
+          "type": "FIELD",
+          "name": "from",
+          "content": {
+            "type": "SYMBOL",
+            "name": "date_part"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "[tT][oO]"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "to",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "date_part"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "date_part": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "[yY][eE][aA][rR]"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[mM][oO][nN][tT][hH]"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[dD][aA][yY]"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[hH][oO][uU][rR]"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[mM][iI][nN][uU][tT][eE]"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[sS][eE][cC][oO][nN][dD]"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[mM][iI][lL][lL][iI][sS][eE][cC][oO][nN][dD]"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[mM][iI][cC][rR][oO][sS][eE][cC][oO][nN][dD]"
+        }
+      ]
     },
     "number_literal": {
       "type": "PATTERN",
