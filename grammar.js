@@ -90,6 +90,8 @@ module.exports = grammar({
       $.table_alias,
       $.subquery,
       $.unnest_expression,
+      $.pivot_expression,
+      $.unpivot_expression,
       $.qualified_table_name,
       $.backtick_identifier,
       $.identifier
@@ -380,6 +382,70 @@ module.exports = grammar({
       kw('UNNEST'),
       '(',
       $._expression,
+      ')'
+    ),
+
+    // PIVOT expression
+    pivot_expression: $ => seq(
+      field('input', choice(
+        $.subquery,
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      $.pivot_clause
+    ),
+
+    pivot_clause: $ => seq(
+      kw('PIVOT'),
+      '(',
+      field('aggregates', choice(
+        // Single aggregate: SUM(sales)
+        $.function_call,
+        // Multiple aggregates with aliases: SUM(sales) AS total, COUNT(*) AS cnt
+        commaSep1($.pivot_aggregate)
+      )),
+      kw('FOR'),
+      field('pivot_column', $.identifier),
+      kw('IN'),
+      '(',
+      commaSep1(choice(
+        $.pivot_value,
+        $._expression
+      )),
+      ')',
+      ')'
+    ),
+
+    pivot_aggregate: $ => seq(
+      $.function_call,
+      kw('AS'),
+      field('alias', $.identifier)
+    ),
+
+    pivot_value: $ => seq(
+      $._expression,
+      kw('AS'),
+      field('alias', $.identifier)
+    ),
+
+    // UNPIVOT expression (placeholder for now)
+    unpivot_expression: $ => seq(
+      field('input', choice(
+        $.subquery,
+        $.qualified_table_name,
+        $.backtick_identifier,
+        $.identifier
+      )),
+      kw('UNPIVOT'),
+      '(',
+      $.identifier,
+      kw('FOR'),
+      $.identifier,
+      kw('IN'),
+      '(',
+      commaSep1($.identifier),
+      ')',
       ')'
     ),
 

@@ -1,0 +1,149 @@
+================================================================================
+Simple PIVOT with aggregate
+================================================================================
+
+SELECT * FROM
+  (SELECT product, quarter, sales FROM sales_data)
+  PIVOT(SUM(sales) FOR quarter IN ('Q1', 'Q2', 'Q3', 'Q4'))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (pivot_expression
+        (subquery
+          (select_statement
+            (select_clause
+              (select_item
+                (identifier))
+              (select_item
+                (identifier))
+              (select_item
+                (identifier)))
+            (from_clause
+              (identifier))))
+        (pivot_clause
+          (function_call
+            (identifier)
+            (identifier))
+          (identifier)
+          (string_literal)
+          (string_literal)
+          (string_literal)
+          (string_literal))))))
+
+================================================================================
+PIVOT with column aliases
+================================================================================
+
+SELECT * FROM
+  (SELECT product, quarter, sales FROM sales_data)
+  PIVOT(SUM(sales) FOR quarter IN ('Q1' AS Q1, 'Q2' AS Q2))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (pivot_expression
+        (subquery
+          (select_statement
+            (select_clause
+              (select_item
+                (identifier))
+              (select_item
+                (identifier))
+              (select_item
+                (identifier)))
+            (from_clause
+              (identifier))))
+        (pivot_clause
+          (function_call
+            (identifier)
+            (identifier))
+          (identifier)
+          (pivot_value
+            (string_literal)
+            (identifier))
+          (pivot_value
+            (string_literal)
+            (identifier)))))))
+
+================================================================================
+PIVOT with multiple aggregates
+================================================================================
+
+SELECT * FROM
+  (SELECT product, quarter, sales, units FROM sales_data)
+  PIVOT(SUM(sales) AS total_sales, COUNT(units) AS total_units
+        FOR quarter IN ('Q1', 'Q2'))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (pivot_expression
+        (subquery
+          (select_statement
+            (select_clause
+              (select_item
+                (identifier))
+              (select_item
+                (identifier))
+              (select_item
+                (identifier))
+              (select_item
+                (identifier)))
+            (from_clause
+              (identifier))))
+        (pivot_clause
+          (pivot_aggregate
+            (function_call
+              (identifier)
+              (identifier))
+            (identifier))
+          (pivot_aggregate
+            (function_call
+              (identifier)
+              (identifier))
+            (identifier))
+          (identifier)
+          (string_literal)
+          (string_literal))))))
+
+================================================================================
+PIVOT with table reference
+================================================================================
+
+SELECT * FROM
+  sales_data
+  PIVOT(SUM(amount) FOR category IN ('Electronics', 'Clothing'))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (star)))
+    (from_clause
+      (pivot_expression
+        (identifier)
+        (pivot_clause
+          (function_call
+            (identifier)
+            (identifier))
+          (identifier)
+          (string_literal)
+          (string_literal))))))
