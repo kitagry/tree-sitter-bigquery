@@ -630,6 +630,15 @@ module.exports = grammar({
       ';'
     ),
 
+    // SET statement
+    set_statement: $ => seq(
+      kw('SET'),
+      field('variable', $.identifier),
+      '=',
+      field('value', $._expression),
+      ';'
+    ),
+
     column_list: $ => seq(
       '(',
       commaSep1($.identifier),
