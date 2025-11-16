@@ -14,12 +14,17 @@ Tree-sitter is a parser generator tool and incremental parsing library. It build
 
 ## About This Project
 
-This project provides a Tree-sitter grammar for Google BigQuery's SQL dialect. BigQuery has many unique features compared to standard SQL, including:
+This project provides a comprehensive Tree-sitter grammar for Google BigQuery's SQL dialect. BigQuery has many unique features compared to standard SQL, and this parser supports:
 
-- Nested and repeated fields (STRUCT and ARRAY types)
-- Table name qualifiers (`project.dataset.table`)
-- BigQuery-specific functions and syntax
-- DDL statements specific to BigQuery
+- **Complete query structure**: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, LIMIT, OFFSET
+- **Advanced SELECT features**: DISTINCT/ALL, set operations (UNION, INTERSECT, EXCEPT)
+- **Nested and repeated fields**: STRUCT and ARRAY types with full bracket notation support
+- **BigQuery-specific syntax**: Table qualifiers (`project.dataset.table`), backtick identifiers
+- **Comprehensive JOIN support**: INNER, LEFT, RIGHT, FULL, CROSS JOINs
+- **Subqueries and CTEs**: Common Table Expressions with WITH clause
+- **Window functions**: OVER, PARTITION BY, frame specifications
+- **DML statements**: INSERT, UPDATE, DELETE, and MERGE
+- **Advanced features**: CASE expressions, CAST, INTERVAL literals, array element access
 
 ## Installation
 
@@ -50,7 +55,12 @@ const BigQuery = require('tree-sitter-bigquery');
 const parser = new Parser();
 parser.setLanguage(BigQuery);
 
-const sourceCode = 'SELECT id, name FROM `project.dataset.table` WHERE id > 100';
+const sourceCode = `
+  SELECT DISTINCT id, name
+  FROM \`project.dataset.table\`
+  WHERE id > 100
+  OFFSET 10
+`;
 const tree = parser.parse(sourceCode);
 
 console.log(tree.rootNode.toString());
@@ -105,15 +115,23 @@ This grammar is being developed incrementally in stages, from simple to complex:
 - ALTER TABLE
 - DROP statements
 
-### Stage 9: Other DML/DQL ✓
-- INSERT, UPDATE, DELETE, MERGE
-- DECLARE and SET
+### Stage 9: Other DML ✓
+- INSERT, UPDATE, DELETE statements
+- Basic DML operations
 
 ### Stage 10: Advanced Features ✓
-- User-Defined Functions (UDFs)
-- CASE expressions
+- CASE expressions (searched and simple)
 - CAST and SAFE_CAST
-- Date and time functions
+- Arithmetic operators
+- BETWEEN, LIKE, IS NULL operators
+
+### Additional High-Priority Features ✓
+- **SELECT DISTINCT / ALL** - Duplicate row control
+- **UNION / INTERSECT / EXCEPT** - Set operations with DISTINCT/ALL modifiers
+- **OFFSET** - Result pagination with LIMIT
+- **Bracket notation** - Array element access (`array[0]`, `array[OFFSET(n)]`, `array[ORDINAL(n)]`)
+- **INTERVAL literals** - Date/time interval expressions (`INTERVAL 1 DAY`, `INTERVAL '1-2' YEAR TO MONTH`)
+- **MERGE statement** - Complete MERGE support with WHEN MATCHED/NOT MATCHED/NOT MATCHED BY SOURCE
 
 ## Testing
 
