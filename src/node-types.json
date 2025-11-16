@@ -1829,6 +1829,21 @@
     }
   },
   {
+    "type": "offset_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "number_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "on_clause",
     "named": true,
     "fields": {},
@@ -2246,6 +2261,10 @@
         },
         {
           "type": "limit_clause",
+          "named": true
+        },
+        {
+          "type": "offset_clause",
           "named": true
         },
         {

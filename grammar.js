@@ -38,6 +38,7 @@ module.exports = grammar({
       optional($.having_clause),
       optional($.order_by_clause),
       optional($.limit_clause),
+      optional($.offset_clause)
     ),
 
     select_clause: $ => seq(
@@ -200,6 +201,11 @@ module.exports = grammar({
 
     limit_clause: $ => seq(
       kw('LIMIT'),
+      $.number_literal
+    ),
+
+    offset_clause: $ => seq(
+      kw('OFFSET'),
       $.number_literal
     ),
 
