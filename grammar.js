@@ -17,20 +17,23 @@ module.exports = grammar({
 
   rules: {
     // Stage 1: Basic SELECT statement
-    source_file: $ => repeat(choice(
-      $.set_operation,
-      $.select_statement,
-      $.create_table_statement,
-      $.create_view_statement,
-      $.create_function_statement,
-      $.drop_table_statement,
-      $.drop_view_statement,
-      $.insert_statement,
-      $.update_statement,
-      $.delete_statement,
-      $.merge_statement,
-      $.declare_statement,
-      $.set_statement
+    source_file: $ => repeat(seq(
+      choice(
+        $.set_operation,
+        $.select_statement,
+        $.create_table_statement,
+        $.create_view_statement,
+        $.create_function_statement,
+        $.drop_table_statement,
+        $.drop_view_statement,
+        $.insert_statement,
+        $.update_statement,
+        $.delete_statement,
+        $.merge_statement,
+        $.declare_statement,
+        $.set_statement
+      ),
+      optional(';')
     )),
 
     select_statement: $ => seq(
@@ -487,8 +490,7 @@ module.exports = grammar({
       kw('AS'),
       '(',
       field('body', $._expression),
-      ')',
-      ';'
+      ')'
     ),
 
     parameter_list: $ => seq(
@@ -661,8 +663,7 @@ module.exports = grammar({
       optional(seq(
         kw('DEFAULT'),
         field('default_value', $._expression)
-      )),
-      ';'
+      ))
     ),
 
     // SET statement
@@ -670,8 +671,7 @@ module.exports = grammar({
       kw('SET'),
       field('variable', $.identifier),
       '=',
-      field('value', $._expression),
-      ';'
+      field('value', $._expression)
     ),
 
     column_list: $ => seq(

@@ -5,59 +5,76 @@
     "source_file": {
       "type": "REPEAT",
       "content": {
-        "type": "CHOICE",
+        "type": "SEQ",
         "members": [
           {
-            "type": "SYMBOL",
-            "name": "set_operation"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "set_operation"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "select_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "create_table_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "create_view_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "create_function_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "drop_table_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "drop_view_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "insert_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "update_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "delete_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "merge_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "declare_statement"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "set_statement"
+              }
+            ]
           },
           {
-            "type": "SYMBOL",
-            "name": "select_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "create_table_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "create_view_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "create_function_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "drop_table_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "drop_view_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "insert_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "update_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "delete_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "merge_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "declare_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "set_statement"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ";"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
           }
         ]
       }
@@ -2495,10 +2512,6 @@
         {
           "type": "STRING",
           "value": ")"
-        },
-        {
-          "type": "STRING",
-          "value": ";"
         }
       ]
     },
@@ -3480,10 +3493,6 @@
               "type": "BLANK"
             }
           ]
-        },
-        {
-          "type": "STRING",
-          "value": ";"
         }
       ]
     },
@@ -3513,10 +3522,6 @@
             "type": "SYMBOL",
             "name": "_expression"
           }
-        },
-        {
-          "type": "STRING",
-          "value": ";"
         }
       ]
     },
