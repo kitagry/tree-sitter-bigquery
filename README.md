@@ -130,7 +130,13 @@ This parser provides comprehensive support for BigQuery SQL, including:
 - **IF...THEN...END IF**: Conditional execution
 - **IF...THEN...ELSE...END IF**: Conditional with alternative branch
 - **ELSEIF**: Multiple conditional branches
-- **Nested blocks**: Support for nested BEGIN...END and IF statements
+- **WHILE...DO...END WHILE**: Conditional loops
+- **LOOP...END LOOP**: Infinite loops with BREAK
+- **REPEAT...UNTIL...END REPEAT**: Post-test loops
+- **BREAK**: Exit from loop
+- **CONTINUE**: Skip to next iteration
+- **LEAVE**: Exit named block or loop
+- **Nested blocks and loops**: Full support for nested structures
 - **CREATE FUNCTION**: SQL-based UDFs with parameters and return types
 - **TEMP functions**: Temporary function definitions
 

@@ -809,6 +809,12 @@ module.exports = grammar({
         $.declare_statement,
         $.set_statement,
         $.if_statement,
+        $.while_statement,
+        $.loop_statement,
+        $.repeat_statement,
+        $.break_statement,
+        $.continue_statement,
+        $.leave_statement,
         $.begin_end_block
       ),
       optional(';')
@@ -836,6 +842,42 @@ module.exports = grammar({
     else_clause: $ => seq(
       kw('ELSE'),
       repeat($._block_statement)
+    ),
+
+    // Loop constructs
+    while_statement: $ => seq(
+      kw('WHILE'),
+      field('condition', $._expression),
+      kw('DO'),
+      repeat($._block_statement),
+      kw('END'),
+      kw('WHILE')
+    ),
+
+    loop_statement: $ => seq(
+      kw('LOOP'),
+      repeat($._block_statement),
+      kw('END'),
+      kw('LOOP')
+    ),
+
+    repeat_statement: $ => seq(
+      kw('REPEAT'),
+      repeat($._block_statement),
+      kw('UNTIL'),
+      field('condition', $._expression),
+      kw('END'),
+      kw('REPEAT')
+    ),
+
+    // Loop control statements
+    break_statement: $ => kw('BREAK'),
+
+    continue_statement: $ => kw('CONTINUE'),
+
+    leave_statement: $ => seq(
+      kw('LEAVE'),
+      optional($.identifier)
     ),
 
     column_list: $ => seq(
