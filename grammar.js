@@ -44,6 +44,7 @@ module.exports = grammar({
       optional($.group_by_clause),
       optional($.having_clause),
       optional($.qualify_clause),
+      optional($.window_clause),
       optional($.order_by_clause),
       optional($.limit_clause),
       optional($.offset_clause)
@@ -497,11 +498,18 @@ module.exports = grammar({
 
     over_clause: $ => seq(
       kw('OVER'),
-      '(',
-      optional($.partition_by_clause),
-      optional($.order_by_clause),
-      optional($.frame_clause),
-      ')'
+      choice(
+        // Named window reference
+        field('window_name', $.identifier),
+        // Inline window specification
+        seq(
+          '(',
+          optional($.partition_by_clause),
+          optional($.order_by_clause),
+          optional($.frame_clause),
+          ')'
+        )
+      )
     ),
 
     partition_by_clause: $ => seq(
@@ -522,6 +530,24 @@ module.exports = grammar({
       seq(kw('UNBOUNDED'), choice(kw('PRECEDING'), kw('FOLLOWING'))),
       seq($.number_literal, choice(kw('PRECEDING'), kw('FOLLOWING'))),
       seq(kw('CURRENT'), kw('ROW'))
+    ),
+
+    // WINDOW clause for named window definitions
+    window_clause: $ => seq(
+      kw('WINDOW'),
+      commaSep1($.window_definition)
+    ),
+
+    window_definition: $ => seq(
+      field('name', $.identifier),
+      kw('AS'),
+      seq(
+        '(',
+        optional($.partition_by_clause),
+        optional($.order_by_clause),
+        optional($.frame_clause),
+        ')'
+      )
     ),
 
     // Stage 8: DDL statements

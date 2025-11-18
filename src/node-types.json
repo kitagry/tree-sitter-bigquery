@@ -3193,7 +3193,18 @@
   {
     "type": "over_clause",
     "named": true,
-    "fields": {},
+    "fields": {
+      "window_name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
@@ -3933,6 +3944,10 @@
         },
         {
           "type": "where_clause",
+          "named": true
+        },
+        {
+          "type": "window_clause",
           "named": true
         },
         {
@@ -5463,6 +5478,55 @@
         },
         {
           "type": "window_function",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "window_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "window_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "window_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "frame_clause",
+          "named": true
+        },
+        {
+          "type": "order_by_clause",
+          "named": true
+        },
+        {
+          "type": "partition_by_clause",
           "named": true
         }
       ]

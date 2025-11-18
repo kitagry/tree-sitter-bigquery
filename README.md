@@ -107,6 +107,7 @@ This parser provides comprehensive support for BigQuery SQL, including:
 - **PARTITION BY**: Partition data for window operations
 - **ORDER BY**: Ordering within windows
 - **Frame clauses**: ROWS/RANGE BETWEEN
+- **WINDOW clause**: Named window definitions
 - **QUALIFY**: Filter on window function results
 
 ### DML Statements
