@@ -1,0 +1,356 @@
+================================================================================
+Simple BEGIN...END block
+================================================================================
+
+BEGIN
+  SELECT 1;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (select_statement
+      (select_clause
+        (select_item
+          (number_literal))))))
+
+================================================================================
+BEGIN...END with DECLARE
+================================================================================
+
+BEGIN
+  DECLARE x INT64 DEFAULT 10;
+  SELECT x;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))
+
+================================================================================
+BEGIN...END with multiple statements
+================================================================================
+
+BEGIN
+  DECLARE total INT64;
+  SET total = 100;
+  SELECT total;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      (identifier)
+      (type))
+    (set_statement
+      (identifier)
+      (number_literal))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))
+
+================================================================================
+Simple IF...THEN...END IF
+================================================================================
+
+BEGIN
+  DECLARE x INT64 DEFAULT 10;
+  IF x > 5 THEN
+    SELECT 'x is greater than 5';
+  END IF;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (if_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (select_statement
+        (select_clause
+          (select_item
+            (string_literal)))))))
+
+================================================================================
+IF...THEN...ELSE...END IF
+================================================================================
+
+BEGIN
+  DECLARE age INT64 DEFAULT 20;
+  IF age >= 18 THEN
+    SELECT 'Adult';
+  ELSE
+    SELECT 'Minor';
+  END IF;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (if_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (select_statement
+        (select_clause
+          (select_item
+            (string_literal))))
+      (else_clause
+        (select_statement
+          (select_clause
+            (select_item
+              (string_literal))))))))
+
+================================================================================
+IF...THEN...ELSEIF...ELSE...END IF
+================================================================================
+
+BEGIN
+  DECLARE score INT64 DEFAULT 85;
+  IF score >= 90 THEN
+    SELECT 'A';
+  ELSEIF score >= 80 THEN
+    SELECT 'B';
+  ELSEIF score >= 70 THEN
+    SELECT 'C';
+  ELSE
+    SELECT 'F';
+  END IF;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (if_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (select_statement
+        (select_clause
+          (select_item
+            (string_literal))))
+      (elseif_clause
+        condition: (binary_expression
+          left: (identifier)
+          right: (number_literal))
+        (select_statement
+          (select_clause
+            (select_item
+              (string_literal)))))
+      (elseif_clause
+        condition: (binary_expression
+          left: (identifier)
+          right: (number_literal))
+        (select_statement
+          (select_clause
+            (select_item
+              (string_literal)))))
+      (else_clause
+        (select_statement
+          (select_clause
+            (select_item
+              (string_literal))))))))
+
+================================================================================
+Nested BEGIN...END blocks
+================================================================================
+
+BEGIN
+  DECLARE x INT64 DEFAULT 10;
+  BEGIN
+    DECLARE y INT64 DEFAULT 20;
+    SELECT x + y;
+  END;
+  SELECT x;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (begin_end_block
+      (declare_statement
+        variable: (identifier)
+        type: (type)
+        default_value: (number_literal))
+      (select_statement
+        (select_clause
+          (select_item
+            (binary_expression
+              left: (identifier)
+              right: (identifier))))))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))
+
+================================================================================
+Nested IF statements
+================================================================================
+
+BEGIN
+  DECLARE age INT64 DEFAULT 25;
+  DECLARE has_license BOOL DEFAULT TRUE;
+  IF age >= 18 THEN
+    IF has_license THEN
+      SELECT 'Can drive';
+    ELSE
+      SELECT 'Cannot drive - no license';
+    END IF;
+  ELSE
+    SELECT 'Cannot drive - too young';
+  END IF;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (boolean_literal))
+    (if_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (if_statement
+        condition: (identifier)
+        (select_statement
+          (select_clause
+            (select_item
+              (string_literal))))
+        (else_clause
+          (select_statement
+            (select_clause
+              (select_item
+                (string_literal))))))
+      (else_clause
+        (select_statement
+          (select_clause
+            (select_item
+              (string_literal))))))))
+
+================================================================================
+IF with multiple statements in THEN block
+================================================================================
+
+BEGIN
+  DECLARE x INT64 DEFAULT 10;
+  IF x > 5 THEN
+    SET x = x * 2;
+    SELECT x;
+  END IF;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (if_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal)))
+      (select_statement
+        (select_clause
+          (select_item
+            (identifier)))))))
+
+================================================================================
+Multiple sequential IF statements
+================================================================================
+
+BEGIN
+  DECLARE x INT64 DEFAULT 10;
+  DECLARE y INT64 DEFAULT 20;
+  IF x > 5 THEN
+    SET x = x * 2;
+  END IF;
+  IF y > 15 THEN
+    SET y = y + 10;
+  END IF;
+  SELECT x, y;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (if_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal))))
+    (if_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal))))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))
+        (select_item
+          (identifier))))))

@@ -123,9 +123,14 @@ This parser provides comprehensive support for BigQuery SQL, including:
 - **DROP statements**: TABLE, VIEW with IF EXISTS support
 - **OR REPLACE**: For idempotent DDL operations
 
-### Scripting and Functions
+### Scripting and Control Flow
 - **DECLARE**: Variable declaration with type and default values
 - **SET**: Variable assignment
+- **BEGIN...END**: Script blocks containing multiple statements
+- **IF...THEN...END IF**: Conditional execution
+- **IF...THEN...ELSE...END IF**: Conditional with alternative branch
+- **ELSEIF**: Multiple conditional branches
+- **Nested blocks**: Support for nested BEGIN...END and IF statements
 - **CREATE FUNCTION**: SQL-based UDFs with parameters and return types
 - **TEMP functions**: Temporary function definitions
 

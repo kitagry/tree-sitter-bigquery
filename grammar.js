@@ -31,7 +31,8 @@ module.exports = grammar({
         $.delete_statement,
         $.merge_statement,
         $.declare_statement,
-        $.set_statement
+        $.set_statement,
+        $.begin_end_block
       ),
       optional(';')
     )),
@@ -78,6 +79,7 @@ module.exports = grammar({
       $.system_variable,
       $.star,
       $.number_literal,
+      $.string_literal,
       $.backtick_identifier,
       $.identifier
     )),
@@ -789,6 +791,53 @@ module.exports = grammar({
       field('value', $._expression)
     ),
 
+    // Control flow: BEGIN...END block
+    begin_end_block: $ => seq(
+      kw('BEGIN'),
+      repeat($._block_statement),
+      kw('END')
+    ),
+
+    // Helper rule for statements inside BEGIN...END or IF blocks
+    _block_statement: $ => seq(
+      choice(
+        $.select_statement,
+        $.insert_statement,
+        $.update_statement,
+        $.delete_statement,
+        $.merge_statement,
+        $.declare_statement,
+        $.set_statement,
+        $.if_statement,
+        $.begin_end_block
+      ),
+      optional(';')
+    ),
+
+    // Control flow: IF statement
+    if_statement: $ => seq(
+      kw('IF'),
+      field('condition', $._expression),
+      kw('THEN'),
+      repeat($._block_statement),
+      repeat($.elseif_clause),
+      optional($.else_clause),
+      kw('END'),
+      kw('IF')
+    ),
+
+    elseif_clause: $ => seq(
+      kw('ELSEIF'),
+      field('condition', $._expression),
+      kw('THEN'),
+      repeat($._block_statement)
+    ),
+
+    else_clause: $ => seq(
+      kw('ELSE'),
+      repeat($._block_statement)
+    ),
+
     column_list: $ => seq(
       '(',
       commaSep1($.identifier),
@@ -822,7 +871,7 @@ module.exports = grammar({
       kw('CASE'),
       optional(field('value', $._expression)),
       repeat1($.when_clause),
-      optional($.else_clause),
+      optional($.case_else_clause),
       kw('END')
     ),
 
@@ -833,7 +882,7 @@ module.exports = grammar({
       field('result', $._expression)
     ),
 
-    else_clause: $ => seq(
+    case_else_clause: $ => seq(
       kw('ELSE'),
       $._expression
     ),
