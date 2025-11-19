@@ -10,6 +10,8 @@
 module.exports = grammar({
   name: "bigquery",
 
+  word: $ => $.identifier,
+
   extras: $ => [
     /\s/, // whitespace
     /--.*/, // single-line comments
@@ -65,23 +67,8 @@ module.exports = grammar({
 
     select_item: $ => prec.right(0, choice(
       $.alias,
-      $.case_expression,
-      $.cast_expression,
-      $.binary_expression,
-      $.function_call,
-      $.array_access,
-      $.field_access,
-      $.subquery,
-      $.array_literal,
-      $.struct_literal,
-      $.interval_literal,
-      $.parameter_marker,
-      $.system_variable,
       $.star,
-      $.number_literal,
-      $.string_literal,
-      $.backtick_identifier,
-      $.identifier
+      $._expression
     )),
 
     from_clause: $ => seq(
@@ -455,26 +442,18 @@ module.exports = grammar({
       ')'
     ),
 
-    qualified_table_name: $ => choice(
-      // project.dataset.table or project.dataset.table_*
-      seq(
-        choice($.identifier, $.backtick_identifier),
-        '.',
-        $.identifier,
-        '.',
-        choice(
+    qualified_table_name: $ => seq(
+      choice($.identifier, $.backtick_identifier),
+      '.',
+      choice(
+        // project.dataset.table or project.dataset.table_*
+        seq(
           $.identifier,
-          $.table_name_with_wildcard
-        )
-      ),
-      // dataset.table or dataset.table_*
-      seq(
-        choice($.identifier, $.backtick_identifier),
-        '.',
-        choice(
-          $.identifier,
-          $.table_name_with_wildcard
-        )
+          '.',
+          choice($.identifier, $.table_name_with_wildcard)
+        ),
+        // dataset.table or dataset.table_*
+        choice($.identifier, $.table_name_with_wildcard)
       )
     ),
 
@@ -1001,10 +980,9 @@ module.exports = grammar({
 });
 
 // Helper function for case-insensitive keywords
+// Using alias to make keywords case-insensitive without regex expansion
 function kw(keyword) {
-  return new RegExp(keyword.split('').map(char =>
-    `[${char.toLowerCase()}${char.toUpperCase()}]`
-  ).join(''));
+  return alias(new RegExp(keyword, 'i'), keyword.toUpperCase());
 }
 
 // Helper function for comma-separated lists (at least one item)
