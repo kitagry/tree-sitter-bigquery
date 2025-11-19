@@ -1,0 +1,423 @@
+================================================================================
+Simple WHILE loop
+================================================================================
+
+BEGIN
+  DECLARE counter INT64 DEFAULT 0;
+  WHILE counter < 10 DO
+    SET counter = counter + 1;
+  END WHILE;
+  SELECT counter;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (while_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal))))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))
+
+================================================================================
+WHILE loop with multiple statements
+================================================================================
+
+BEGIN
+  DECLARE i INT64 DEFAULT 1;
+  DECLARE sum INT64 DEFAULT 0;
+  WHILE i <= 5 DO
+    SET sum = sum + i;
+    SET i = i + 1;
+  END WHILE;
+  SELECT sum;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (while_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (identifier)))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal))))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))
+
+================================================================================
+Nested WHILE loops
+================================================================================
+
+BEGIN
+  DECLARE x INT64 DEFAULT 0;
+  DECLARE y INT64 DEFAULT 0;
+  WHILE x < 3 DO
+    SET y = 0;
+    WHILE y < 3 DO
+      SET y = y + 1;
+    END WHILE;
+    SET x = x + 1;
+  END WHILE;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (while_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (set_statement
+        variable: (identifier)
+        value: (number_literal))
+      (while_statement
+        condition: (binary_expression
+          left: (identifier)
+          right: (number_literal))
+        (set_statement
+          variable: (identifier)
+          value: (binary_expression
+            left: (identifier)
+            right: (number_literal))))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal))))))
+
+================================================================================
+Simple LOOP with BREAK
+================================================================================
+
+BEGIN
+  DECLARE i INT64 DEFAULT 0;
+  LOOP
+    SET i = i + 1;
+    IF i >= 10 THEN
+      BREAK;
+    END IF;
+  END LOOP;
+  SELECT i;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (loop_statement
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal)))
+      (if_statement
+        condition: (binary_expression
+          left: (identifier)
+          right: (number_literal))
+        (break_statement)))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))
+
+================================================================================
+LOOP with multiple BREAK conditions
+================================================================================
+
+BEGIN
+  DECLARE counter INT64 DEFAULT 0;
+  DECLARE found BOOL DEFAULT FALSE;
+  LOOP
+    SET counter = counter + 1;
+    IF counter = 5 THEN
+      SET found = TRUE;
+      BREAK;
+    END IF;
+    IF counter > 100 THEN
+      BREAK;
+    END IF;
+  END LOOP;
+  SELECT counter, found;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (boolean_literal))
+    (loop_statement
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal)))
+      (if_statement
+        condition: (binary_expression
+          left: (identifier)
+          right: (number_literal))
+        (set_statement
+          variable: (identifier)
+          value: (boolean_literal))
+        (break_statement))
+      (if_statement
+        condition: (binary_expression
+          left: (identifier)
+          right: (number_literal))
+        (break_statement)))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))
+        (select_item
+          (identifier))))))
+
+================================================================================
+Simple REPEAT...UNTIL loop
+================================================================================
+
+BEGIN
+  DECLARE x INT64 DEFAULT 0;
+  REPEAT
+    SET x = x + 1;
+  UNTIL x >= 5
+  END REPEAT;
+  SELECT x;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (repeat_statement
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal)))
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal)))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))
+
+================================================================================
+REPEAT with multiple statements
+================================================================================
+
+BEGIN
+  DECLARE counter INT64 DEFAULT 0;
+  DECLARE sum INT64 DEFAULT 0;
+  REPEAT
+    SET counter = counter + 1;
+    SET sum = sum + counter;
+  UNTIL counter >= 10
+  END REPEAT;
+  SELECT counter, sum;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (repeat_statement
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal)))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (identifier)))
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal)))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))
+        (select_item
+          (identifier))))))
+
+================================================================================
+WHILE with CONTINUE
+================================================================================
+
+BEGIN
+  DECLARE i INT64 DEFAULT 0;
+  DECLARE sum INT64 DEFAULT 0;
+  WHILE i < 10 DO
+    SET i = i + 1;
+    IF i % 2 = 0 THEN
+      CONTINUE;
+    END IF;
+    SET sum = sum + i;
+  END WHILE;
+  SELECT sum;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (while_statement
+      condition: (binary_expression
+        left: (identifier)
+        right: (number_literal))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal)))
+      (if_statement
+        condition: (binary_expression
+          left: (binary_expression
+            left: (identifier)
+            right: (number_literal))
+          right: (number_literal))
+        (continue_statement))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (identifier))))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))
+
+================================================================================
+LOOP with BREAK and CONTINUE
+================================================================================
+
+BEGIN
+  DECLARE counter INT64 DEFAULT 0;
+  DECLARE result INT64 DEFAULT 0;
+  LOOP
+    SET counter = counter + 1;
+    IF counter > 20 THEN
+      BREAK;
+    END IF;
+    IF counter % 3 = 0 THEN
+      CONTINUE;
+    END IF;
+    SET result = result + counter;
+  END LOOP;
+  SELECT result;
+END
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (begin_end_block
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (declare_statement
+      variable: (identifier)
+      type: (type)
+      default_value: (number_literal))
+    (loop_statement
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (number_literal)))
+      (if_statement
+        condition: (binary_expression
+          left: (identifier)
+          right: (number_literal))
+        (break_statement))
+      (if_statement
+        condition: (binary_expression
+          left: (binary_expression
+            left: (identifier)
+            right: (number_literal))
+          right: (number_literal))
+        (continue_statement))
+      (set_statement
+        variable: (identifier)
+        value: (binary_expression
+          left: (identifier)
+          right: (identifier))))
+    (select_statement
+      (select_clause
+        (select_item
+          (identifier))))))

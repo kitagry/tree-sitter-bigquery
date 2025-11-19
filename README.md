@@ -107,6 +107,7 @@ This parser provides comprehensive support for BigQuery SQL, including:
 - **PARTITION BY**: Partition data for window operations
 - **ORDER BY**: Ordering within windows
 - **Frame clauses**: ROWS/RANGE BETWEEN
+- **WINDOW clause**: Named window definitions
 - **QUALIFY**: Filter on window function results
 
 ### DML Statements
@@ -122,9 +123,20 @@ This parser provides comprehensive support for BigQuery SQL, including:
 - **DROP statements**: TABLE, VIEW with IF EXISTS support
 - **OR REPLACE**: For idempotent DDL operations
 
-### Scripting and Functions
+### Scripting and Control Flow
 - **DECLARE**: Variable declaration with type and default values
 - **SET**: Variable assignment
+- **BEGIN...END**: Script blocks containing multiple statements
+- **IF...THEN...END IF**: Conditional execution
+- **IF...THEN...ELSE...END IF**: Conditional with alternative branch
+- **ELSEIF**: Multiple conditional branches
+- **WHILE...DO...END WHILE**: Conditional loops
+- **LOOP...END LOOP**: Infinite loops with BREAK
+- **REPEAT...UNTIL...END REPEAT**: Post-test loops
+- **BREAK**: Exit from loop
+- **CONTINUE**: Skip to next iteration
+- **LEAVE**: Exit named block or loop
+- **Nested blocks and loops**: Full support for nested structures
 - **CREATE FUNCTION**: SQL-based UDFs with parameters and return types
 - **TEMP functions**: Temporary function definitions
 

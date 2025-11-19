@@ -2,7 +2,7 @@
 
 # Generated source files
 src/*.json linguist-generated
-src/parser.c linguist-generated
+src/parser.c -diff
 src/tree_sitter/* linguist-generated
 
 # C bindings

@@ -16,14 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
+      - name: Set up tree-sitter CLI
+        uses: tree-sitter/setup-action/cli@v1
         with:
-          node-version: 'latest'
-
-      - name: Install Dependencies
-        run: |
-          npm install
+          install-lib: false
 
       - name: Run Tree-sitter Tests
-        run: npx tree-sitter test
+        run: tree-sitter test

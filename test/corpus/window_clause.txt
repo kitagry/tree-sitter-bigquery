@@ -1,0 +1,331 @@
+================================================================================
+Basic named window with ORDER BY
+================================================================================
+
+SELECT
+  name,
+  salary,
+  AVG(salary) OVER w AS avg_salary
+FROM employees
+WINDOW w AS (ORDER BY salary DESC)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (window_clause
+      (window_definition
+        name: (identifier)
+        (order_by_clause
+          (order_item
+            (identifier)))))))
+
+================================================================================
+Multiple functions using same named window
+================================================================================
+
+SELECT
+  name,
+  salary,
+  AVG(salary) OVER w AS avg_salary,
+  RANK() OVER w AS rank
+FROM employees
+WINDOW w AS (ORDER BY salary DESC)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier)))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (window_clause
+      (window_definition
+        name: (identifier)
+        (order_by_clause
+          (order_item
+            (identifier)))))))
+
+================================================================================
+Named window with PARTITION BY
+================================================================================
+
+SELECT
+  department,
+  name,
+  AVG(salary) OVER w AS dept_avg
+FROM employees
+WINDOW w AS (PARTITION BY department)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (window_clause
+      (window_definition
+        name: (identifier)
+        (partition_by_clause
+          (identifier))))))
+
+================================================================================
+Named window with PARTITION BY and ORDER BY
+================================================================================
+
+SELECT
+  department,
+  name,
+  salary,
+  ROW_NUMBER() OVER w AS dept_rank
+FROM employees
+WINDOW w AS (PARTITION BY department ORDER BY salary DESC)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (window_clause
+      (window_definition
+        name: (identifier)
+        (partition_by_clause
+          (identifier))
+        (order_by_clause
+          (order_item
+            (identifier)))))))
+
+================================================================================
+Multiple named windows
+================================================================================
+
+SELECT
+  department,
+  name,
+  salary,
+  AVG(salary) OVER dept_window AS dept_avg,
+  AVG(salary) OVER company_window AS company_avg
+FROM employees
+WINDOW
+  dept_window AS (PARTITION BY department),
+  company_window AS (ORDER BY salary DESC)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier)))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (window_clause
+      (window_definition
+        name: (identifier)
+        (partition_by_clause
+          (identifier)))
+      (window_definition
+        name: (identifier)
+        (order_by_clause
+          (order_item
+            (identifier)))))))
+
+================================================================================
+Named window with frame specification
+================================================================================
+
+SELECT
+  date,
+  revenue,
+  SUM(revenue) OVER w AS rolling_sum
+FROM sales
+WINDOW w AS (
+  ORDER BY date
+  ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (window_clause
+      (window_definition
+        name: (identifier)
+        (order_by_clause
+          (order_item
+            (identifier)))
+        (frame_clause
+          start: (frame_bound
+            (number_literal))
+          end: (frame_bound))))))
+
+================================================================================
+Named window with UNBOUNDED frame
+================================================================================
+
+SELECT
+  date,
+  revenue,
+  SUM(revenue) OVER cumulative AS cumulative_sum
+FROM sales
+WINDOW cumulative AS (
+  ORDER BY date
+  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (window_clause
+      (window_definition
+        name: (identifier)
+        (order_by_clause
+          (order_item
+            (identifier)))
+        (frame_clause
+          start: (frame_bound)
+          end: (frame_bound))))))
+
+================================================================================
+Empty named window
+================================================================================
+
+SELECT
+  name,
+  AVG(salary) OVER w AS avg_salary
+FROM employees
+WINDOW w AS ()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (select_statement
+    (select_clause
+      (select_item
+        (identifier))
+      (select_item
+        (alias
+          (window_function
+            name: (identifier)
+            arguments: (identifier)
+            (over_clause
+              window_name: (identifier)))
+          alias: (identifier))))
+    (from_clause
+      (identifier))
+    (window_clause
+      (window_definition
+        name: (identifier)))))

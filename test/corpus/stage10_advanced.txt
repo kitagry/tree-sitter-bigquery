@@ -22,7 +22,7 @@ FROM users
                 left: (identifier)
                 right: (number_literal))
               result: (string_literal))
-            (else_clause
+            (case_else_clause
               (string_literal)))
           alias: (identifier))))
     (from_clause
@@ -51,7 +51,7 @@ FROM users
             (when_clause
               condition: (string_literal)
               result: (string_literal))
-            (else_clause
+            (case_else_clause
               (string_literal)))
           alias: (identifier))))
     (from_clause

@@ -10,6 +10,8 @@
 module.exports = grammar({
   name: "bigquery",
 
+  word: $ => $.identifier,
+
   extras: $ => [
     /\s/, // whitespace
     /--.*/, // single-line comments
@@ -31,7 +33,8 @@ module.exports = grammar({
         $.delete_statement,
         $.merge_statement,
         $.declare_statement,
-        $.set_statement
+        $.set_statement,
+        $.begin_end_block
       ),
       optional(';')
     )),
@@ -44,6 +47,7 @@ module.exports = grammar({
       optional($.group_by_clause),
       optional($.having_clause),
       optional($.qualify_clause),
+      optional($.window_clause),
       optional($.order_by_clause),
       optional($.limit_clause),
       optional($.offset_clause)
@@ -63,22 +67,8 @@ module.exports = grammar({
 
     select_item: $ => prec.right(0, choice(
       $.alias,
-      $.case_expression,
-      $.cast_expression,
-      $.binary_expression,
-      $.function_call,
-      $.array_access,
-      $.field_access,
-      $.subquery,
-      $.array_literal,
-      $.struct_literal,
-      $.interval_literal,
-      $.parameter_marker,
-      $.system_variable,
       $.star,
-      $.number_literal,
-      $.backtick_identifier,
-      $.identifier
+      $._expression
     )),
 
     from_clause: $ => seq(
@@ -452,26 +442,18 @@ module.exports = grammar({
       ')'
     ),
 
-    qualified_table_name: $ => choice(
-      // project.dataset.table or project.dataset.table_*
-      seq(
-        choice($.identifier, $.backtick_identifier),
-        '.',
-        $.identifier,
-        '.',
-        choice(
+    qualified_table_name: $ => seq(
+      choice($.identifier, $.backtick_identifier),
+      '.',
+      choice(
+        // project.dataset.table or project.dataset.table_*
+        seq(
           $.identifier,
-          $.table_name_with_wildcard
-        )
-      ),
-      // dataset.table or dataset.table_*
-      seq(
-        choice($.identifier, $.backtick_identifier),
-        '.',
-        choice(
-          $.identifier,
-          $.table_name_with_wildcard
-        )
+          '.',
+          choice($.identifier, $.table_name_with_wildcard)
+        ),
+        // dataset.table or dataset.table_*
+        choice($.identifier, $.table_name_with_wildcard)
       )
     ),
 
@@ -497,11 +479,18 @@ module.exports = grammar({
 
     over_clause: $ => seq(
       kw('OVER'),
-      '(',
-      optional($.partition_by_clause),
-      optional($.order_by_clause),
-      optional($.frame_clause),
-      ')'
+      choice(
+        // Named window reference
+        field('window_name', $.identifier),
+        // Inline window specification
+        seq(
+          '(',
+          optional($.partition_by_clause),
+          optional($.order_by_clause),
+          optional($.frame_clause),
+          ')'
+        )
+      )
     ),
 
     partition_by_clause: $ => seq(
@@ -522,6 +511,24 @@ module.exports = grammar({
       seq(kw('UNBOUNDED'), choice(kw('PRECEDING'), kw('FOLLOWING'))),
       seq($.number_literal, choice(kw('PRECEDING'), kw('FOLLOWING'))),
       seq(kw('CURRENT'), kw('ROW'))
+    ),
+
+    // WINDOW clause for named window definitions
+    window_clause: $ => seq(
+      kw('WINDOW'),
+      commaSep1($.window_definition)
+    ),
+
+    window_definition: $ => seq(
+      field('name', $.identifier),
+      kw('AS'),
+      seq(
+        '(',
+        optional($.partition_by_clause),
+        optional($.order_by_clause),
+        optional($.frame_clause),
+        ')'
+      )
     ),
 
     // Stage 8: DDL statements
@@ -763,6 +770,95 @@ module.exports = grammar({
       field('value', $._expression)
     ),
 
+    // Control flow: BEGIN...END block
+    begin_end_block: $ => seq(
+      kw('BEGIN'),
+      repeat($._block_statement),
+      kw('END')
+    ),
+
+    // Helper rule for statements inside BEGIN...END or IF blocks
+    _block_statement: $ => seq(
+      choice(
+        $.select_statement,
+        $.insert_statement,
+        $.update_statement,
+        $.delete_statement,
+        $.merge_statement,
+        $.declare_statement,
+        $.set_statement,
+        $.if_statement,
+        $.while_statement,
+        $.loop_statement,
+        $.repeat_statement,
+        $.break_statement,
+        $.continue_statement,
+        $.leave_statement,
+        $.begin_end_block
+      ),
+      optional(';')
+    ),
+
+    // Control flow: IF statement
+    if_statement: $ => seq(
+      kw('IF'),
+      field('condition', $._expression),
+      kw('THEN'),
+      repeat($._block_statement),
+      repeat($.elseif_clause),
+      optional($.else_clause),
+      kw('END'),
+      kw('IF')
+    ),
+
+    elseif_clause: $ => seq(
+      kw('ELSEIF'),
+      field('condition', $._expression),
+      kw('THEN'),
+      repeat($._block_statement)
+    ),
+
+    else_clause: $ => seq(
+      kw('ELSE'),
+      repeat($._block_statement)
+    ),
+
+    // Loop constructs
+    while_statement: $ => seq(
+      kw('WHILE'),
+      field('condition', $._expression),
+      kw('DO'),
+      repeat($._block_statement),
+      kw('END'),
+      kw('WHILE')
+    ),
+
+    loop_statement: $ => seq(
+      kw('LOOP'),
+      repeat($._block_statement),
+      kw('END'),
+      kw('LOOP')
+    ),
+
+    repeat_statement: $ => seq(
+      kw('REPEAT'),
+      repeat($._block_statement),
+      kw('UNTIL'),
+      field('condition', $._expression),
+      kw('END'),
+      kw('REPEAT')
+    ),
+
+    // Loop control statements
+    break_statement: $ => kw('BREAK'),
+
+    continue_statement: $ => kw('CONTINUE'),
+
+    leave_statement: $ => seq(
+      kw('LEAVE'),
+      optional($.identifier)
+    ),
+
     column_list: $ => seq(
       '(',
       commaSep1($.identifier),
@@ -796,7 +892,7 @@ module.exports = grammar({
       kw('CASE'),
       optional(field('value', $._expression)),
       repeat1($.when_clause),
-      optional($.else_clause),
+      optional($.case_else_clause),
       kw('END')
     ),
 
@@ -807,7 +903,7 @@ module.exports = grammar({
       field('result', $._expression)
     ),
 
-    else_clause: $ => seq(
+    case_else_clause: $ => seq(
       kw('ELSE'),
       $._expression
     ),
@@ -884,10 +980,9 @@ module.exports = grammar({
 });
 
 // Helper function for case-insensitive keywords
+// Using alias to make keywords case-insensitive without regex expansion
 function kw(keyword) {
-  return new RegExp(keyword.split('').map(char =>
-    `[${char.toLowerCase()}${char.toUpperCase()}]`
-  ).join(''));
+  return alias(new RegExp(keyword, 'i'), keyword.toUpperCase());
 }
 
 // Helper function for comma-separated lists (at least one item)
